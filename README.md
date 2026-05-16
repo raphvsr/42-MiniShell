@@ -1,2 +1,2 @@
-# 42-MiniShell
-Group Project for school 42, this project is about creating a shell.
+*This project has been created as part of the 42 curriculum by <rvasseur>, <kislamov>*
+
