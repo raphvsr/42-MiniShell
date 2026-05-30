@@ -1,41 +1,59 @@
-NAME = minishell
-CC = cc
-CFLAGS = -Wall -Wextra -Werror -I./libft
+# **************************************************************************** #
+#                                                                              #
+#                                                         :::      ::::::::    #
+#    Makefile                                           :+:      :+:    :+:    #
+#                                                     +:+ +:+         +:+      #
+#    By: p0ubelle <p0ubelle@student.42.fr>          +#+  +:+       +#+         #
+#                                                 +#+#+#+#+#+   +#+            #
+#    Created: 2026/05/30 12:00:00 by p0ubelle          #+#    #+#              #
+#    Updated: 2026/05/30 12:00:00 by p0ubelle         ###   ########.fr        #
+#                                                                              #
+# **************************************************************************** #
 
-LIBFT_DIR = ./libft
-LIBFT = $(LIBFT_DIR)/libft.a
+NAME        = minishell
 
-SRCS = 	src/main.c \
-		src/builtins/cd.c \
-		src/builtins/echo.c \
-		src/builtins/env.c \
-		src/builtins/exit.c \
-		src/builtins/export.c \
-		src/builtins/pwd.c \
-		src/builtins/unset.c
+CC          = cc
+CFLAGS      = -Wall -Wextra -Werror
+INCLUDES    = -I./src -I./libft
 
-OBJS = $(SRCS:.c=.o)
+LIBFT_DIR   = ./libft
+LIBFT       = $(LIBFT_DIR)/libft.a
 
-all: $(LIBFT) $(NAME)
+SRCS        = src/main.c \
+              src/env/env_utils.c \
+              src/builtins/cd.c \
+              src/builtins/echo.c \
+              src/builtins/env.c \
+              src/builtins/exit.c \
+              src/builtins/export.c \
+              src/builtins/pwd.c \
+              src/builtins/unset.c
+
+OBJS        = $(SRCS:.c=.o)
+
+HEADER      = src/minishell.h
+
+all: $(NAME)
+
+$(NAME): $(LIBFT) $(OBJS)
+	$(CC) $(CFLAGS) $(OBJS) $(LIBFT) -lreadline -o $(NAME)
 
 $(LIBFT):
-	make -C $(LIBFT_DIR)
+	@make -C $(LIBFT_DIR)
 
-$(NAME): $(OBJS)
-	$(CC) $(CFLAGS) $(OBJS) $(LIBFT) -o $(NAME)
-
-%.o: %.c
-	$(CC) $(CFLAGS) -c $< -o $@
-
+%.o: %.c $(HEADER)
+	$(CC) $(CFLAGS) $(INCLUDES) -c $< -o $@
 
 clean:
-	make -C $(LIBFT_DIR) clean
+	@make -C $(LIBFT_DIR) clean
 	rm -f $(OBJS)
 
 fclean: clean
-	make -C $(LIBFT_DIR) fclean
+	@make -C $(LIBFT_DIR) fclean
 	rm -f $(NAME)
 
 re: fclean all
 
-.PHONY: all clean fclean re
+bonus: all
+
+.PHONY: all clean fclean re bonus
