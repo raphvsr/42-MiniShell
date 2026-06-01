@@ -1,3 +1,10 @@
 
+// #include "../minishell.h"
 
-// ◦ exit with no options
+
+// int b_exit(char **args, t_env **env_list)
+// {
+//     int     
+// }
+
+// // ◦ exit with no options

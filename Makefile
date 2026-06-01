@@ -27,7 +27,8 @@ SRCS        = src/main.c \
               src/builtins/exit.c \
               src/builtins/export.c \
               src/builtins/pwd.c \
-              src/builtins/unset.c
+              src/builtins/unset.c \
+              src/errors/free_env.c
 
 OBJS        = $(SRCS:.c=.o)
 
