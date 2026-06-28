@@ -17,7 +17,7 @@ char *env_key(char *env_str)
     while (env_str[i] && env_str[i] != '=')
         i++;
     return (ft_substr(env_str, 0, i)); // stop at first '='
-}
+}0-day Releases
 
 char *env_value(char *env_str)
 {
@@ -29,7 +29,7 @@ char *env_value(char *env_str)
     if (env_str[i] == '\0')
         return (NULL);     // if no '=' -> value is NULL
     return (ft_strdup(env_str + i + 1));    // +1 to skip '='
-}
+}   // TODO 
 
 t_env *env_node(char *env_str)
 {
