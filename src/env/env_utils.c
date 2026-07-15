@@ -17,7 +17,7 @@ char *env_key(char *env_str)
     while (env_str[i] && env_str[i] != '=')
         i++;
     return (ft_substr(env_str, 0, i)); // stop at first '='
-}0-day Releases
+}
 
 char *env_value(char *env_str)
 {
