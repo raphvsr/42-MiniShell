@@ -34,5 +34,7 @@ int b_cd(char **argv, t_env **env_list);
 int b_echo(char **args);
 int b_exit(char **args, t_env **env_list);
 int b_env(t_env **env_list);
+int b_unset(char **args, t_env **env_list);
+
 
 #endif

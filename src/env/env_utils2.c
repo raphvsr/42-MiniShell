@@ -1,7 +1,5 @@
 
 #include "../minishell.h"
-#include <stdlib.h>
-#include <time.h>
 
 t_env *env_find(t_env *env_list, char *key)
   {
@@ -39,7 +37,7 @@ int env_rm_value(t_env **env_list, char *key)
     current = *env_list;
     previous = NULL;
 
-    while (current->key != key)
+    while (current && ft_strncmp(current->key, key, ft_strlen(key) + 1) != 0)
     {
         previous = current;
         current = current->next;
