@@ -26,7 +26,8 @@ void free_lenv(t_env *env_list);
 t_env *env_find(t_env *env_list, char *key);
 int env_set_value(t_env *env_list, char *key, char *value);
 int env_rm_value(t_env **env_list, char *key);
-
+void env_add_back(t_env **env_list, t_env *new_node);
+int env_add_value(t_env **env_list, char *key, char *value);
 
 // buildins
 int b_pwd();
