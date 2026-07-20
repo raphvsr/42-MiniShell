@@ -28,6 +28,9 @@ int env_set_value(t_env *env_list, char *key, char *value);
 int env_rm_value(t_env **env_list, char *key);
 void env_add_back(t_env **env_list, t_env *new_node);
 int env_add_value(t_env **env_list, char *key, char *value);
+char *env_key(char *env_str);
+char *env_value(char *env_str);
+
 
 // buildins
 int b_pwd();
@@ -39,3 +42,6 @@ int b_unset(char **args, t_env **env_list);
 
 
 #endif
+
+
+

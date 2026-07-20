@@ -13,5 +13,3 @@ int b_unset(char **args, t_env **env_list)
     }
     return 0;
 }
-
-// ◦ unset with no options
