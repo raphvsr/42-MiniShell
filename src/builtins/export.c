@@ -29,5 +29,5 @@ int b_export(char *arg, t_env **env_list)
 {
     if (!is_valid_export(arg))
         return 0;
-    
+    return 1;
 }
