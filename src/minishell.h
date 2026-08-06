@@ -36,7 +36,7 @@ typedef struct s_cmd
 
 
 
-int main(void);
+int main(int ac, char **av, char **envp);
 
 // env ($printenv)
 t_env *init_env(char **envp);
@@ -51,6 +51,7 @@ char *env_value(char *env_str);
 
 
 // buildins
+int execute_builtin(char **args, t_env **env_list); // detecter les buildins
 int b_pwd();
 int b_cd(char **argv, t_env **env_list);
 int b_echo(char **args);

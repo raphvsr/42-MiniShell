@@ -16,8 +16,12 @@
 
 int	b_echo(char **args);
 
-int	main(void)
+int	main(int ac, char **av, char **envp)
 {
+	(void)ac;
+	(void)av;
+
+	t_env *env = init_env(envp);
 	char	*line;
 
 	while (1)
@@ -29,7 +33,15 @@ int	main(void)
 			break;
 		}
 		if (*line)
+		{
 			add_history(line);
+			char **args;
+			args = ft_split(line, ' ');
+			if (args && args[0])
+			{
+				execute_builtin(args, &env);
+			}
+		}
 		free(line);
 	}
 	return 0;

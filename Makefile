@@ -29,7 +29,8 @@ SRCS        = src/main.c \
               src/builtins/pwd.c \
               src/builtins/unset.c \
               src/errors/free_env.c \
-              src/env/env_utils2.c
+              src/env/env_utils2.c \
+							src/exec/executor.c
 
 OBJS        = $(SRCS:.c=.o)
 
