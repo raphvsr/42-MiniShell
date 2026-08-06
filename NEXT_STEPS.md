@@ -59,7 +59,7 @@ ligne de readline
 Le parsing doit gérer les mots, les quotes, `$VAR`, `$?`, les pipes et les
 redirections `<`, `>`, `<<` et `>>`.
 
-### Exécution
+### Exécution 
 
 ```text
 liste de commandes
