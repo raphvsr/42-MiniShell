@@ -24,6 +24,8 @@ int	main(int ac, char **av, char **envp)
 	t_env *env = init_env(envp);
 	char	*line;
 
+	init_signals();
+
 	while (1)
 	{
 		line = readline("p0ubelle> ");
