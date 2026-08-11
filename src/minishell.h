@@ -60,6 +60,9 @@ int b_env(t_env **env_list);
 int b_unset(char **args, t_env **env_list);
 int b_export(char *arg, t_env **env_list);
 
+// signals
+void init_signals(void);
+
 
 #endif
 

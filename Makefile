@@ -21,16 +21,12 @@ LIBFT       = $(LIBFT_DIR)/libft.a
 
 SRCS        = src/main.c \
               src/env/env_utils.c \
-              src/builtins/cd.c \
-              src/builtins/echo.c \
-              src/builtins/env.c \
-              src/builtins/exit.c \
-              src/builtins/export.c \
-              src/builtins/pwd.c \
-              src/builtins/unset.c \
+							src/builtins/cd.c src/builtins/echo.c src/builtins/exit.c src/builtins/env.c \
+							src/builtins/export.c src/builtins/pwd.c src/builtins/unset.c \
               src/errors/free_env.c \
               src/env/env_utils2.c \
-							src/exec/executor.c
+							src/exec/executor.c \
+							src/signals/signals.c
 
 OBJS        = $(SRCS:.c=.o)
 
