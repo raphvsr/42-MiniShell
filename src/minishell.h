@@ -18,22 +18,35 @@ typedef struct s_env {
 } t_env;
 
 
+// redirections
+typedef enum e_redir_type
+{
+    REDIR_IN,      // <
+    REDIR_OUT,     // >
+    REDIR_APPEND,  // >>
+    REDIR_HEREDOC  // <<
+}   t_redir_type;
+
+
+
 // 1. struct de redirections (<, >, >>, <<)
 typedef struct s_redir
 {
-    int             type; // REDIR_IN (0), REDIR_OUT (1), APPEND (2), HEREDOC (3)
-    char            *file; // nom fichier ou délimiteur du yheredoc
+    t_redir_type    type;
+    char            *file;        // heredofile name or heredoc delimiter 
+    int             was_quoted;   // 1 if ' ' or " " 0 if not
+    int             heredoc_fd;   // heredoc filedescriptor (-1 if not a heredoc)
     struct s_redir  *next;
 }   t_redir;
+
 
 // 2. Pour chaque commande du pipeline (séparées par des pipes '|')
 typedef struct s_cmd
 {
-    char            **argv;     // Tableau d'arguments (ex: {"ls", "-la", NULL})
-    t_redir         *redirs;   // Liste chaînée des redirections de cette commande
-    struct s_cmd    *next;     // Commande suivante après le '|' (NULL si dernière)
+    char            **argv;       // {"ls", "-la", NULL}
+    t_redir         *redirs;      // liste des redirections
+    struct s_cmd    *next;        // commande suivante après le pipe '|'
 }   t_cmd;
-
 
 
 
