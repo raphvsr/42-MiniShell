@@ -33,7 +33,7 @@ typedef enum e_redir_type
 typedef struct s_redir
 {
     t_redir_type    type;
-    char            *file;        // heredofile name or heredoc delimiter 
+    char            *file;        // heredoc file name or heredoc delimiter
     int             was_quoted;   // 1 if ' ' or " " 0 if not
     int             heredoc_fd;   // heredoc filedescriptor (-1 if not a heredoc)
     struct s_redir  *next;
@@ -69,7 +69,7 @@ int execute_builtin(char **args, t_env **env_list); // detecter les buildins
 int b_pwd();
 int b_cd(char **argv, t_env **env_list);
 int b_echo(char **args);
-int b_exit(char **args, t_env **env_list);
+int b_exit(char **args, t_env **env_list, int lstatus);
 int b_env(t_env **env_list);
 int b_unset(char **args, t_env **env_list);
 int b_export(char *arg, t_env **env_list);
