@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: p0ubelle <p0ubelle@student.42.fr>          +#+  +:+       +#+        */
+/*   By: kheda <kheda@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/06 19:22:28 by p0ubelle          #+#    #+#             */
-/*   Updated: 2026/08/15 08:03:10 by p0ubelle         ###   ########.fr       */
+/*   Updated: 2026/08/15 12:37:12 by kheda            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ int	main(int ac, char **av, char **envp)
 	t_env *env = init_env(envp);
 	char	*line;
 
-	init_signals();
+	// init_signals();
 
 	while (1)
 	{
