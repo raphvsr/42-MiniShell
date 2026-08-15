@@ -8,7 +8,7 @@ static int validate(char *arg)
     int i;
 
     i = 1;
-	if (!arg || !ft_isalpha(arg[0]) && arg[0] != '_') // first letter
+	if ((!arg || !ft_isalpha(arg[0])) && arg[0] != '_') // first letter
 		return (0);
     while (arg[i] && arg[i] != '=') // for key
     {

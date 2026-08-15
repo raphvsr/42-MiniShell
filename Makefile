@@ -6,7 +6,7 @@
 #    By: kheda <kheda@student.42.fr>                +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2026/05/30 12:00:00 by p0ubelle          #+#    #+#              #
-#    Updated: 2026/08/15 18:58:53 by kheda            ###   ########.fr        #
+#    Updated: 2026/08/15 23:29:33 by kheda            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -26,6 +26,7 @@ SRCS        =	src/main.c \
 				src/errors/free_env.c \
 				src/env/env_utils2.c \
 				src/exec/executor.c \
+				src/parsing/parsing_utils.c \
 				src/parsing/lexer/split_line.c \
 				src/parsing/lexer/lexer.c
 # 				src/signals/signals.c 

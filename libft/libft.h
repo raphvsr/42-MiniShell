@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   libft.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: p0ubelle <p0ubelle@student.42.fr>          +#+  +:+       +#+        */
+/*   By: kheda <kheda@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/03 18:31:41 by rvasseur          #+#    #+#             */
-/*   Updated: 2026/08/15 10:03:12 by p0ubelle         ###   ########.fr       */
+/*   Updated: 2026/08/16 00:32:18 by kheda            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,8 +28,7 @@ int					ft_isdigit(int c);
 int					ft_isprint(int c);
 char				*ft_itoa(int n);
 void				*ft_memchr(const void *ptr, int ch, size_t count);
-int					ft_memcmp(const void *pointer1, const void *pointer2,
-						size_t size);
+int					ft_memcmp(const void *pointer1, const void *pointer2, size_t size);
 void				*ft_memcpy(void *dest, const void *src, size_t count);
 void				*ft_memmove(void *dest, const void *src, size_t count);
 void				*ft_memset(void *ptr, int value, size_t size);

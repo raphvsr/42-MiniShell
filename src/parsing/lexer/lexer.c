@@ -1,61 +1,64 @@
 #include "../../minishell.h"
 #include "../../../libft/libft.h"
 
-int main()
+
+int	lexer(t_cmd *command, char *line)
 {
-	t_cmd *command;
-	char **str;
-	char *line;
-	int i;
+	t_cmd	*current; // to remove
+	char	**str;
+	int		i;
 
 	command = malloc(sizeof(t_cmd *));
 	if (!command)
 		return (0);
 
-	while (1)
+	// add_history(line);  // better here ?
+	str = split_line(line, ' ');
+	command->argv = str;
+	// printf("%s\n", command.argv[1]);
+	
+	i = 0;
+	current = command;
+	while (current->argv[i])
 	{
-		line = readline("SHELL : ");
-		if (!line){
-			printf("aie\n");
-			break;}
-
-		str = split_line(line, ' ');
-		command->argv = str;
-		// printf("%s\n", command.argv[1]);
-
-		t_cmd *current;
-		
-		i = 0;
-		current = command;
-		while (current->argv[i])
-		{
-			printf("%s\n", current->argv[i]);
-			i++;
-		}
-		// FREE SPLIT
-		free(line);
+		printf("%s\n", current->argv[i]);
+		i++;
 	}
-	// 	t_cmd *current;
-	// i = 0;
-	// 	current = command;
-	// 	while (current->argv[i])
-	// 	{
-	// 		printf("%s\n", current->argv[i]);
-	// 		i++;
-	// 	}
-
-	// i = 0;
-	// while (str[i])
-	// {
-	// 	printf("%s\n", str[i]);
-	// 	i++;
-	// }
-	// printf("%s\n", *command.argv[2]);   // different
-	// printf("%s\n", command.argv[2]);
-
-	free(str);
-	return (0);
+	return (1);
 }
+
+// int	main()
+// {
+// 	t_cmd	*command;
+// 	char	*line;
+
+// 	// init_signals();
+// 	command = NULL;
+// 	while (1)
+// 	{
+// 		line = readline("p0ubelle> ");
+// 		if (!line)
+// 		{
+// 			printf("exit\n");
+// 			break;
+// 		}
+// 		if (*line) // no need ?
+// 		{
+// 			add_history(line);
+// 			if (!lexer(command, line))
+// 				return (0);
+// 			// char **args;
+// 			// args = ft_split(line, ' ');
+// 			// if (command->argv && command->argv[0])
+// 			// {
+// 			// 	execute_builtin(command->argv, &env);
+// 			// }
+			
+// 		}
+// 		free(line);
+// 	}
+// 	return 0;
+// }
 
 //cc lexer.c ../../../libft/ft_split.c -lreadline
 //echo "nevermind" || grep "never mind"
