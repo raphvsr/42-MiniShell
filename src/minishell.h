@@ -9,7 +9,7 @@
 # include <readline/readline.h>
 # include <readline/history.h>
 # include "../libft/libft.h"
-# include <linux/limits.h>
+// # include <linux/limits.h>
 
 typedef struct s_env {
     char            *key;
