@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   libft.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rvasseur <rvasseur@student.42.fr>          +#+  +:+       +#+        */
+/*   By: p0ubelle <p0ubelle@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/03 18:31:41 by rvasseur          #+#    #+#             */
-/*   Updated: 2025/11/21 20:44:39 by rvasseur         ###   ########.fr       */
+/*   Updated: 2026/08/15 10:03:12 by p0ubelle         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,6 +46,7 @@ size_t				ft_strlcat(char *dest, const char *src, size_t size);
 size_t				ft_strlcpy(char *dest, const char *src, size_t size);
 size_t				ft_strlen(const char *str);
 char				*ft_strmapi(char const *s, char (*f)(unsigned int, char));
+int					ft_strcmp(const char *s1, const char *s2);
 int					ft_strncmp(const char *first, const char *second, size_t n);
 char				*ft_strnstr(const char *s1, const char *s2, size_t len);
 char				*ft_strrchr(const char *string, int searchedChar);
@@ -53,6 +54,7 @@ char				*ft_strtrim(char const *s1, char const *set);
 char				*ft_substr(char const *s, unsigned int start, size_t len);
 int					ft_tolower(int c);
 int					ft_toupper(int c);
+
 
 typedef struct s_list
 {
