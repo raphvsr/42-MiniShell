@@ -50,8 +50,6 @@ typedef struct s_cmd
 
 
 
-int main(int ac, char **av, char **envp);
-
 // env ($printenv)
 t_env *init_env(char **envp);
 void free_lenv(t_env *env_list);
@@ -77,6 +75,8 @@ int b_export(char **args, t_env **env_list);
 // signals
 void init_signals(void);
 
+// parsing
+char	**split_line(char const *s, char c);
 
 #endif
 

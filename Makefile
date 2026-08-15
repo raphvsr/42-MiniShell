@@ -6,7 +6,7 @@
 #    By: kheda <kheda@student.42.fr>                +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2026/05/30 12:00:00 by p0ubelle          #+#    #+#              #
-#    Updated: 2026/08/15 11:54:59 by kheda            ###   ########.fr        #
+#    Updated: 2026/08/15 18:58:53 by kheda            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -20,12 +20,12 @@ LIBFT_DIR   = ./libft
 LIBFT       = $(LIBFT_DIR)/libft.a
 
 SRCS        =	src/main.c \
-              src/env/env_utils.c \
-							src/builtins/cd.c src/builtins/echo.c src/builtins/exit.c src/builtins/env.c \
-							src/builtins/export.c src/builtins/pwd.c src/builtins/unset.c \
-              src/errors/free_env.c \
-              src/env/env_utils2.c \
-							src/exec/executor.c \
+				src/env/env_utils.c \
+				src/builtins/cd.c src/builtins/echo.c src/builtins/exit.c src/builtins/env.c \
+				src/builtins/export.c src/builtins/pwd.c src/builtins/unset.c \
+				src/errors/free_env.c \
+				src/env/env_utils2.c \
+				src/exec/executor.c \
 				src/parsing/lexer/split_line.c \
 				src/parsing/lexer/lexer.c
 # 				src/signals/signals.c 
