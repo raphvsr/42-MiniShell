@@ -22,8 +22,6 @@ int main()
 		str = split_line(line, ' ');
 		command->argv = str;
 		// printf("%s\n", command.argv[1]);
-		
-
 
 		t_cmd *current;
 		

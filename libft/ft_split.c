@@ -36,7 +36,6 @@ char	*mal_words(char *s, char c)
 	int		lgt;
 	char	*str;
 	int		i;
-	int		quote;
 
 	i = 0;
 	lgt = 0;

@@ -22,7 +22,7 @@ int	main(int ac, char **av, char **envp)
 	t_env *env = init_env(envp);
 	char	*line;
 
-	init_signals();
+	// init_signals();
 
 	while (1)
 	{
