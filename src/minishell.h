@@ -69,10 +69,10 @@ int execute_builtin(char **args, t_env **env_list); // detecter les buildins
 int b_pwd();
 int b_cd(char **argv, t_env **env_list);
 int b_echo(char **args);
-int b_exit(char **args, t_env **env_list, int lstatus);
+int b_exit(char **args, t_env **env_list); // int lstatus
 int b_env(t_env **env_list);
 int b_unset(char **args, t_env **env_list);
-int b_export(char *arg, t_env **env_list);
+int b_export(char **args, t_env **env_list);
 
 // signals
 void init_signals(void);

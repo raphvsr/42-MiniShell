@@ -6,15 +6,13 @@
 /*   By: p0ubelle <p0ubelle@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/06 19:22:28 by p0ubelle          #+#    #+#             */
-/*   Updated: 2026/08/08 00:30:40 by p0ubelle         ###   ########.fr       */
+/*   Updated: 2026/08/15 08:03:10 by p0ubelle         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 #include <readline/history.h>
 #include <readline/readline.h>
-
-int	b_echo(char **args);
 
 int	main(int ac, char **av, char **envp)
 {

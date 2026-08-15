@@ -35,7 +35,7 @@ static int validate(const char *str, long long *cexit)
 }
 
 
-int b_exit(char **args, t_env **env_list, int lstatus)
+int b_exit(char **args, t_env **env_list) // TODO int lstatus (need for later exit code)
 {
 	long long exit_code;
 
@@ -43,7 +43,8 @@ int b_exit(char **args, t_env **env_list, int lstatus)
 	if(!args[1])
 	{
 		free_lenv(*env_list);
-		exit((unsigned char)lstatus);
+		// exit((unsigned char)lstatus);
+		exit(1);
 	}
 
 	if (!validate(args[1], &exit_code))

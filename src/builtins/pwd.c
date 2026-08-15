@@ -4,7 +4,7 @@
 
 #include "../minishell.h"
 
-int b_pwd()
+int b_pwd(void)
 {
     char curr_path[PATH_MAX]; // a changer ? 4096 ?
 
@@ -14,6 +14,5 @@ int b_pwd()
         write(STDOUT_FILENO, "\n", 1);
         return 0;
     }
-    else
-        return (ft_putstr_fd("error getting path", STDOUT_FILENO), 1);
+    return (perror("minishell: pwd"), 1);
 }

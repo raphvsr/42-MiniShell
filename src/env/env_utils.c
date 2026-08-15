@@ -4,8 +4,8 @@
 // env_key -> part before '='
 // env_value -> part after '='
 
-// example -> SHELL=/usr/bin/bash     
-// env_key = SHELL  
+// example -> SHELL=/usr/bin/bash
+// env_key = SHELL
 // env_value = /usr/bin/bash
 
 
@@ -29,7 +29,7 @@ char *env_value(char *env_str)
     if (env_str[i] == '\0')
         return (NULL);     // if no '=' -> value is NULL
     return (ft_strdup(env_str + i + 1));    // +1 to skip '='
-}   // TODO 
+}
 
 t_env *env_node(char *env_str)
 {
@@ -41,7 +41,7 @@ t_env *env_node(char *env_str)
     new_node->key = env_key(env_str);
     new_node->value = env_value(env_str);
     new_node->next = NULL;
-    
+
     // if strdup or substr failed :
     if ((!new_node->key || ft_strchr(env_str, '=')) && !new_node->value)
     {
@@ -83,7 +83,7 @@ t_env *init_env(char **envp)
         new_node = env_node(envp[i]);
         if (!new_node)
         {
-            free_lenv(env_list); 
+            free_lenv(env_list);
             return (NULL);
         }
         env_add_back(&env_list, new_node);
