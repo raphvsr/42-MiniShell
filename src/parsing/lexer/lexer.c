@@ -1,5 +1,4 @@
 #include "../../minishell.h"
-#include "../../../libft/libft.h"
 
 
 int	lexer(t_cmd *command, char *line)
@@ -8,15 +7,16 @@ int	lexer(t_cmd *command, char *line)
 	char	**str;
 	int		i;
 
-	command = malloc(sizeof(t_cmd *));
+	command = malloc(sizeof(t_cmd));
 	if (!command)
 		return (0);
 
 	// add_history(line);  // better here ?
 	str = split_line(line, ' ');
 	command->argv = str;
+
 	// printf("%s\n", command.argv[1]);
-	
+
 	i = 0;
 	current = command;
 	while (current->argv[i])
@@ -24,6 +24,7 @@ int	lexer(t_cmd *command, char *line)
 		printf("%s\n", current->argv[i]);
 		i++;
 	}
+
 	return (1);
 }
 
@@ -53,7 +54,7 @@ int	lexer(t_cmd *command, char *line)
 // 			// {
 // 			// 	execute_builtin(command->argv, &env);
 // 			// }
-			
+
 // 		}
 // 		free(line);
 // 	}
