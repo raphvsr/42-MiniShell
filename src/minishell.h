@@ -12,19 +12,19 @@
 // # include <linux/limits.h>
 
 typedef struct s_env {
-    char            *key;
-    char            *value;
-    struct s_env    *next;
+	char            *key;
+	char            *value;
+	struct s_env    *next;
 } t_env;
 
 
 // redirections
 typedef enum e_redir_type
 {
-    REDIR_IN,      // <
-    REDIR_OUT,     // >
-    REDIR_APPEND,  // >>
-    REDIR_HEREDOC  // <<
+	REDIR_IN,      // <
+	REDIR_OUT,     // >
+	REDIR_APPEND,  // >>
+	REDIR_HEREDOC  // <<
 }   t_redir_type;
 
 
@@ -32,20 +32,20 @@ typedef enum e_redir_type
 // 1. struct de redirections (<, >, >>, <<)
 typedef struct s_redir
 {
-    t_redir_type    type;
-    char            *file;        // heredoc file name or heredoc delimiter
-    int             was_quoted;   // 1 if ' ' or " " 0 if not
-    int             heredoc_fd;   // heredoc filedescriptor (-1 if not a heredoc)
-    struct s_redir  *next;
+	t_redir_type    type;
+	char            *file;        // heredoc file name or heredoc delimiter
+	int             was_quoted;   // 1 if ' ' or " " 0 if not
+	int             heredoc_fd;   // heredoc filedescriptor (-1 if not a heredoc)
+	struct s_redir  *next;
 }   t_redir;
 
 
 // 2. Pour chaque commande du pipeline (séparées par des pipes '|')
 typedef struct s_cmd
 {
-    char            **argv;       // {"ls", "-la", NULL}
-    t_redir         *redirs;      // liste des redirections
-    struct s_cmd    *next;        // commande suivante après le pipe '|'
+	char            **argv;       // {"ls", "-la", NULL}
+	t_redir         *redirs;      // liste des redirections
+	struct s_cmd    *next;        // commande suivante après le pipe '|'
 }   t_cmd;
 
 
@@ -60,17 +60,19 @@ void env_add_back(t_env **env_list, t_env *new_node);
 int env_add_value(t_env **env_list, char *key, char *value);
 char *env_key(char *env_str);
 char *env_value(char *env_str);
+int count_env(t_env *env_list);
+char	**env_to_array(t_env *env_list);
 
 
 // buildins
-int execute_builtin(char **args, t_env **env_list); // detecter les buildins
-int b_pwd();
-int b_cd(char **argv, t_env **env_list);
-int b_echo(char **args);
-int b_exit(char **args, t_env **env_list); // int lstatus
-int b_env(t_env **env_list);
-int b_unset(char **args, t_env **env_list);
-int b_export(char **args, t_env **env_list);
+int	execute_builtin(char **args, t_env **env_list); // detecter les buildins
+int	b_pwd();
+int	b_cd(char **argv, t_env **env_list);
+int	b_echo(char **args);
+int	b_exit(char **args, t_env **env_list); // TODO: int lstatus
+int	b_env(t_env **env_list);
+int	b_unset(char **args, t_env **env_list);
+int	b_export(char **args, t_env **env_list);
 
 // signals
 void init_signals(void);
@@ -79,6 +81,9 @@ void init_signals(void);
 // int		symbol(char c);
 char	**split_line(char const *s, char c);
 int		lexer(t_cmd *command, char *line);
+
+
+// exec
 
 #endif
 

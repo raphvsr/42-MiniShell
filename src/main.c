@@ -6,7 +6,7 @@
 /*   By: p0ubelle <p0ubelle@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/06 19:22:28 by p0ubelle          #+#    #+#             */
-/*   Updated: 2026/08/16 20:30:27 by p0ubelle         ###   ########.fr       */
+/*   Updated: 2026/08/17 16:01:02 by p0ubelle         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,8 @@
 
 int	main(int ac, char **av, char **envp)
 {
+	(void)ac;
+	(void)av;
 	t_env 	*env;
 	t_cmd	*command;
 	char	*line;

@@ -19,18 +19,7 @@ static int validate(char *arg)
     return 1;
 }
 
-int count_env(t_env *env_list)
-{
-	int count;
 
-	count = 0;
-	while (env_list)
-	{
-		count++;
-		env_list = env_list->next;
-	}
-	return (count);
-}
 
 // create a temporary pointer array to sort without mooving the real one
 void show_env(t_env *env_list)
@@ -40,7 +29,6 @@ void show_env(t_env *env_list)
 	int env_len;
 	t_env **tab;
 	t_env *temp;
-	t_env *curr;
 
 	env_len = count_env(env_list);
 	if (env_len == 0)
@@ -48,11 +36,10 @@ void show_env(t_env *env_list)
 	if (!(tab = malloc(sizeof(t_env *) * env_len))) // t_env * = 8 bytes per slot
 		return ;
 	i = 0;
-	curr = env_list;
-	while (curr) // we fill the new array
+	while (env_list) // we fill the new array
 	{
-		tab[i++] = curr;
-		curr = curr->next;
+		tab[i++] = env_list;
+		env_list = env_list->next;
 	}
 	i = 0;
 	while (i < env_len)

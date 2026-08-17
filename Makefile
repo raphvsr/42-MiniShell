@@ -6,7 +6,7 @@
 #    By: p0ubelle <p0ubelle@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2026/05/30 12:00:00 by p0ubelle          #+#    #+#              #
-#    Updated: 2026/08/16 15:44:38 by p0ubelle         ###   ########.fr        #
+#    Updated: 2026/08/17 15:51:51 by p0ubelle         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -28,7 +28,8 @@ SRCS        =	src/main.c \
 				src/exec/executor.c \
 				src/parsing/parsing_utils.c \
 				src/parsing/lexer/split_line.c \
-				src/parsing/lexer/lexer.c
+				src/parsing/lexer/lexer.c \
+				src/env/env_utils3.c
 # 				src/signals/signals.c
 
 OBJS        = $(SRCS:.c=.o)
