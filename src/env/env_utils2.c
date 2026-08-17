@@ -1,8 +1,16 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   env_utils2.c                                       :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: p0ubelle <p0ubelle@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/08/17 09:00:07 by p0ubelle          #+#    #+#             */
+/*   Updated: 2026/08/17 09:00:23 by p0ubelle         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
 #include "../minishell.h"
-#include <stdlib.h>
-#include <time.h>
-#include <unistd.h>
 
 t_env *env_find(t_env *env_list, char *key)
 {
@@ -36,7 +44,7 @@ int env_rm_value(t_env **env_list, char *key)
 {
     t_env  *current;
     t_env  *previous;
-    
+
     current = *env_list;
     previous = NULL;
 
@@ -54,8 +62,8 @@ int env_rm_value(t_env **env_list, char *key)
     free(current->key);
     free(current->value);
     free(current);
-    
-    
+
+
     return (0);
 }
 
