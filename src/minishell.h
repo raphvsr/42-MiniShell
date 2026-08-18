@@ -80,7 +80,7 @@ void init_signals(void);
 // parsing
 // int		symbol(char c);
 char	**split_line(char const *s, char c);
-int		lexer(t_cmd *command, char *line);
+t_cmd	*lexer(char *line);
 
 
 // exec

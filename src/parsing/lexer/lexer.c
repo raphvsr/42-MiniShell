@@ -1,9 +1,10 @@
 #include "../../minishell.h"
 
 
-int	lexer(t_cmd *command, char *line)
+t_cmd	*lexer(char *line)
 {
 	t_cmd	*current; // to remove
+	t_cmd	*command;
 	char	**str;
 	int		i;
 
@@ -25,7 +26,7 @@ int	lexer(t_cmd *command, char *line)
 		i++;
 	}
 
-	return (1);
+	return (command);
 }
 
 // int	main()
