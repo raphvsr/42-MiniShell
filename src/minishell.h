@@ -84,6 +84,8 @@ t_cmd	*lexer(char *line);
 
 
 // exec
+int executor(char **args, t_env **env_list);
+
 
 #endif
 

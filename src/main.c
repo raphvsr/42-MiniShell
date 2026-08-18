@@ -6,7 +6,7 @@
 /*   By: rvasseur <raphael.vasseur@proton.me>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/06 19:22:28 by p0ubelle          #+#    #+#             */
-/*   Updated: 2026/08/18 15:11:57 by rvasseur         ###   ########.fr       */
+/*   Updated: 2026/08/18 15:53:44 by rvasseur         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,8 @@ int	main(int ac, char **av, char **envp)
 			if (command && command->argv[0])
 			{
 				printf("_____result exec_____\n");
-				execute_builtin(command->argv, &env);
+				executor(command->argv, &env);
+				printf("\n\n\n");
 			}
 			// char **args;
 			// args = ft_split(line, ' ');

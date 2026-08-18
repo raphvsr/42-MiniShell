@@ -1,6 +1,14 @@
 
 #include "minishell.h"
 
+int executor(char **args, t_env **env_list)
+{
+	if (execute_builtin(args, env_list) == 0)
+		return 0;
+	printf("not a builtin");
+	return 0;
+}
+
 int execute_builtin(char **args, t_env **env_list)
 {
 	if (ft_strncmp(args[0], "echo", 5) == 0)
