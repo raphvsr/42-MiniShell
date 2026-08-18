@@ -66,3 +66,5 @@ int b_exit(char **args, t_env **env_list) // TODO int lstatus (need for later ex
 	return (0);
 }
 
+
+

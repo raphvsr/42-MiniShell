@@ -19,3 +19,24 @@ int execute_builtin(char **args, t_env **env_list)
 		return (b_exit(args, env_list));
 	return (-1); // not a buildin
 }
+
+int exec_cmd(t_cmd *cmd, t_env *env)
+{
+	char **array_env;
+
+	array_env = env_to_array(env);
+	if (!cmd || !cmd->argv || !cmd->argv[0])
+		return 0;
+	int pid = fork();	// commands delete all memory and replace it so we must
+	if (pid == 0)		// create a child (clone) to sacrifice himself
+
+	if (ft_strchr(cmd->argv[0], '/'))
+	{
+		execve(access(cmd->argv[0], 1), cmd->argv, array_env);
+		return 0;
+	}
+	else
+	{
+		return  0;
+	}
+}
