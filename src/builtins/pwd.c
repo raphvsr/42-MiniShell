@@ -2,7 +2,7 @@
 
 // ◦ pwd with no options
 
-#include "../minishell.h"
+#include "minishell.h"
 
 int b_pwd(void)
 {

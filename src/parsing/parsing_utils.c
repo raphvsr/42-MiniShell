@@ -1,5 +1,5 @@
-#include "../../libft/libft.h"
-#include "../minishell.h"
+#include "libft.h"
+#include "minishell.h"
 
 int	symbol(char c)
 {

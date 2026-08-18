@@ -1,5 +1,5 @@
 
-#include "../minishell.h"
+#include "minishell.h"
 
 
 static int validate(const char *str, long long *cexit)

@@ -1,5 +1,5 @@
 
-#include "../minishell.h"
+#include "minishell.h"
 
 // env_key -> part before '='
 // env_value -> part after '='

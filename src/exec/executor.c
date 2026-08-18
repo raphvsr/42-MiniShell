@@ -1,5 +1,5 @@
 
-#include "../minishell.h"
+#include "minishell.h"
 
 int execute_builtin(char **args, t_env **env_list)
 {
@@ -27,12 +27,18 @@ int exec_cmd(t_cmd *cmd, t_env *env)
 	array_env = env_to_array(env);
 	if (!cmd || !cmd->argv || !cmd->argv[0])
 		return 0;
-	int pid = fork();	// commands delete all memory and replace it so we must
-	if (pid == 0)		// create a child (clone) to sacrifice himself
+	// int pid = fork();	// commands delete all memory and replace it so we must create a child (clone) to sacrifice himself
+	// if (pid == 0)
 
 	if (ft_strchr(cmd->argv[0], '/'))
 	{
-		execve(access(cmd->argv[0], 1), cmd->argv, array_env);
+		if (access(cmd->argv[0], F_OK) == 0)
+			if (access(cmd->argv[0], X_OK) == 0)
+				execve(cmd->argv[0], cmd->argv, array_env);
+			else
+				exit (126);
+		else
+			exit (127);
 		return 0;
 	}
 	else

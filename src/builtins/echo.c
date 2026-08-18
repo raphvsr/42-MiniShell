@@ -3,7 +3,7 @@
 // ◦ echo with option -n
 
 
-#include "../minishell.h"
+#include "minishell.h"
 
 int b_echo(char **args)
 {

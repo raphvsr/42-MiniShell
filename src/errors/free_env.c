@@ -1,5 +1,5 @@
 
-#include "../minishell.h"
+#include "minishell.h"
 
 void free_lenv(t_env *env_list)
 {

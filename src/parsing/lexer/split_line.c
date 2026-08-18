@@ -3,15 +3,15 @@
 /*                                                        :::      ::::::::   */
 /*   split_line.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kheda <kheda@student.42.fr>                +#+  +:+       +#+        */
+/*   By: rvasseur <raphael.vasseur@proton.me>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/14 01:36:20 by kheda             #+#    #+#             */
-/*   Updated: 2026/08/15 11:39:33 by kheda            ###   ########.fr       */
+/*   Updated: 2026/08/18 15:04:05 by rvasseur         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../../libft/libft.h"
-#include <stdio.h>
+#include "libft.h"
+
 static int	free_all(char **tab, int len)
 {
 	int	i;

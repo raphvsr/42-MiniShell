@@ -1,5 +1,5 @@
 
-#include "../minishell.h"
+#include "minishell.h"
 
 // TODO separate 25 lines functions -> norminette
 // export need to validate the name (e.g USER=raph -> valid. 2USER=raph -> invalid)

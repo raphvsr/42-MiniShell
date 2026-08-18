@@ -1,6 +1,6 @@
 
 
-#include "../minishell.h"
+#include "minishell.h"
 
 int b_unset(char **args, t_env **env_list)
 {

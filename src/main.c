@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: p0ubelle <p0ubelle@student.42.fr>          +#+  +:+       +#+        */
+/*   By: rvasseur <raphael.vasseur@proton.me>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/06 19:22:28 by p0ubelle          #+#    #+#             */
-/*   Updated: 2026/08/17 16:01:02 by p0ubelle         ###   ########.fr       */
+/*   Updated: 2026/08/18 15:11:57 by rvasseur         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,9 +34,11 @@ int	main(int ac, char **av, char **envp)
 		if (*line) // no need ?
 		{
 			add_history(line);
+			printf("____result parsing____\n");
 			command = lexer(line);
 			if (command && command->argv[0])
 			{
+				printf("_____result exec_____\n");
 				execute_builtin(command->argv, &env);
 			}
 			// char **args;

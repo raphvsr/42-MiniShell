@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   env_utils2.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: p0ubelle <p0ubelle@student.42.fr>          +#+  +:+       +#+        */
+/*   By: rvasseur <raphael.vasseur@proton.me>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/17 09:00:07 by p0ubelle          #+#    #+#             */
-/*   Updated: 2026/08/17 09:00:23 by p0ubelle         ###   ########.fr       */
+/*   Updated: 2026/08/18 15:04:39 by rvasseur         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../minishell.h"
+#include "minishell.h"
 
 t_env *env_find(t_env *env_list, char *key)
 {
