@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   split_line.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rvasseur <raphael.vasseur@proton.me>       +#+  +:+       +#+        */
+/*   By: kheda <kheda@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/14 01:36:20 by kheda             #+#    #+#             */
-/*   Updated: 2026/08/18 15:04:05 by rvasseur         ###   ########.fr       */
+/*   Updated: 2026/08/18 19:21:28 by kheda            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ static int	free_all(char **tab, int len)
 	return (0);
 }
 
-static int	count_words(char const *s, char c)
+static int    count_words(char const *s, char c)
 {
 	int	i;
 	int	cpt;
@@ -38,15 +38,14 @@ static int	count_words(char const *s, char c)
 	{
 		if (s[i] != c && (s[i + 1] == c || s[i + 1] == '\0'))
 			cpt++;
-		else if (s[i] == c && (s[i + 1] == '\'' || s[i + 1] == '"'))
+		else if (s[i] == '\'' || s[i] == '"')
 			flag = 1;
 		while (flag == 1 && s[i])
 		{
-			if ((s[i] == '\'' || s[i] == '"') && s[i + 1] == c)
-			{
+			if ((s[i + 1] == '\'' || s[i + 1] == '"'))
 				flag = 0;
+			if (flag == 0 && (s[i + 1] == c || s[i + 1] == '\0'))
 				cpt++;
-			}
 			else
 				i++;
 		}
