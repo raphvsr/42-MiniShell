@@ -9,6 +9,8 @@
 # include <readline/readline.h>
 # include <readline/history.h>
 # include "../libft/libft.h"
+# include <sys/types.h>
+# include <sys/wait.h>
 // # include <linux/limits.h>
 
 typedef struct s_env {
@@ -84,7 +86,7 @@ t_cmd	*lexer(char *line);
 
 
 // exec
-int executor(char **args, t_env **env_list);
+int executor(char **args, t_env **env_list, t_cmd **cmd);
 
 
 #endif

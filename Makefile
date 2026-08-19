@@ -36,7 +36,7 @@ OBJS        = $(SRCS:.c=.o)
 
 HEADER      = src/minishell.h
 
-all: $(NAME) $(LIBFT)
+all: $(NAME)
 
 $(NAME): $(LIBFT) $(OBJS)
 	$(CC) $(CFLAGS) $(OBJS) $(LIBFT) -lreadline -o $(NAME)
