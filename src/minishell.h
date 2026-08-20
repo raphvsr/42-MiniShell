@@ -67,7 +67,7 @@ char	**env_to_array(t_env *env_list);
 
 
 // buildins
-int	execute_builtin(char **args, t_env **env_list); // detecter les buildins
+int execute_builtin(t_cmd *cmd, t_env **env_list);
 int	b_pwd();
 int	b_cd(char **argv, t_env **env_list);
 int	b_echo(char **args);
@@ -86,7 +86,7 @@ t_cmd	*lexer(char *line);
 
 
 // exec
-int executor(char **args, t_env **env_list, t_cmd **cmd);
+int executor(t_cmd **cmd, t_env **env_list);
 
 
 #endif
