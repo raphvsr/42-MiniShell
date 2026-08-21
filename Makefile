@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: p0ubelle <p0ubelle@student.42.fr>          +#+  +:+       +#+         #
+#    By: rvasseur <raphael.vasseur@proton.me>       +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2026/05/30 12:00:00 by p0ubelle          #+#    #+#              #
-#    Updated: 2026/08/17 15:51:51 by p0ubelle         ###   ########.fr        #
+#    Updated: 2026/08/21 09:31:46 by rvasseur         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -23,7 +23,7 @@ SRCS        =	src/main.c \
 				src/env/env_utils.c \
 				src/builtins/cd.c src/builtins/echo.c src/builtins/exit.c src/builtins/env.c \
 				src/builtins/export.c src/builtins/pwd.c src/builtins/unset.c \
-				src/errors/free_env.c \
+				src/errors/free_env.c src/errors/err_utils.c \
 				src/env/env_utils2.c \
 				src/exec/executor.c \
 				src/parsing/parsing_utils.c \

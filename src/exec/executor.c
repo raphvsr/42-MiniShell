@@ -2,7 +2,6 @@
 #include "minishell.h"
 
 
-
 int execute_builtin(t_cmd *cmd, t_env **env_list)
 {
 	if (ft_strncmp(cmd->argv[0], "echo", 5) == 0)
@@ -22,82 +21,93 @@ int execute_builtin(t_cmd *cmd, t_env **env_list)
 	return (-1); // not a buildin
 }
 
-static void cprocess(t_cmd *cmd, char **array_env)
+
+static char *f_cmdpath(char *cmd, t_env *env_list)
 {
-	if (access(cmd->argv[0], F_OK) != 0) // if we cant find the cmd
+	t_env *path;
+	char **paths_values;
+	char *half;
+	char *full;
+	int i;
+
+	if (!cmd || !*cmd)
+		return (NULL);
+	if (ft_strchr(cmd, '/'))
+		return (ft_strdup(cmd));
+	path = env_find(env_list, "PATH");
+	if(!path || !path->value)
+		return (NULL);
+	paths_values = ft_split(path->value, ':');
+	i = -1;
+	while (paths_values && paths_values[++i])
+	{
+		half = ft_strjoin(paths_values[i], "/");
+		full = ft_strjoin(half, cmd);
+		free(half);
+		if (full && access(full, F_OK) == 0)
+			return (free_array(paths_values), full);
+		free(full);
+	}
+	return (free_array(paths_values), NULL);
+}
+
+
+static void cprocess(char *cmd_path, t_cmd *cmd, char **array_env)
+{
+	if (!cmd_path)
+		err_exit(cmd->argv[0], ": command not found", 127);
+	if (access(cmd_path, F_OK) != 0) // if we cant exec the cmd
 	{
 		perror(cmd->argv[0]);
 		exit(127);
 	}
-	if (access(cmd->argv[0], X_OK) != 0) // if we cant exec the cmd
+		if (access(cmd_path, X_OK) != 0) // if we cant exec the cmd
 	{
 		perror(cmd->argv[0]);
 		exit(126);
 	}
-	execve(cmd->argv[0], cmd->argv, array_env);
-	perror("execve");	// if execve succeed everything else is destroyed
-	exit (1);			// so it will erase both those lines
+	execve(cmd_path, cmd->argv, array_env);
+	perror("minishell: execve");	// if execve succeed everything else is destroyed
+	exit (1);						// so it will erase both those lines
 }
 
 
-int exec_slashcmd(t_cmd *cmd, t_env **env_list)
+int exec_cmd(t_cmd *cmd, t_env **env_list)
 {
+	char	*cmd_path;
 	char	**array_env;
 	pid_t	pid;
 	int 	status;
 
-	if (!cmd || !cmd->argv || !cmd->argv[0])
-		return 0;
-	if (ft_strchr(cmd->argv[0], '/')) // if child process
-	{
-		array_env = env_to_array(*env_list);
-		pid = fork(); // commands delete all memory and replace it so we must create a child (clone) to sacrifice himself
-		if (pid < 0)
-			return (perror("minishell: fork"), 1);
-		if (pid == 0)
-			cprocess(cmd, array_env);
-		waitpid(pid, &status, 0); // wait for child
-		return -1;
-	}
-	return -1;
-}
-
-int exec_cmd(t_cmd *cmd, t_env **env_list)
-{
-	char	**array_env;
-	pid_t	pid;
-	int		status;
-	t_env	*path;
-
-	path = env_find(*env_list, "PATH");
-	if (!path || !path->value)
-		return (perror("minishell: path"), -1);
-	printf("%s", path->value);
-	if (!cmd || !cmd->argv || !cmd->argv[0])
-		return -1;
-
-	printf("in command"); // if child process
+	cmd_path = f_cmdpath(cmd->argv[0], *env_list);
 	array_env = env_to_array(*env_list);
-	pid = fork(); // commands delete all memory and replace it so we must create a child (clone) to sacrifice himself
-	if (pid < 0)
-		return (perror("minishell: fork"), 1);
-	if (pid == 0)
-		cprocess(cmd, array_env);
-	waitpid(pid, &status, 0);
-	return 0;
+	pid = fork();
 
-	return -1;
+	if (pid < 0)
+	{
+		perror("minishell: fork");
+		free(cmd_path);
+		return (free_array(array_env), 1);
+	}
+	if (pid == 0)
+		cprocess(cmd_path, cmd, array_env);
+	waitpid(pid, &status, 0); // wait for child
+	free(cmd_path);
+	free_array(array_env);
+	if (WIFEXITED(status))
+		return (WEXITSTATUS(status));
+	return 0;
 }
 
 int executor(t_cmd **cmd, t_env **env_list)
 {
+	int bstatus;
 
-	if (exec_slashcmd(*cmd, env_list) == 0)
-		return 0;
-	if (execute_builtin(*cmd, env_list) == 0)
-		return 0;
-	if (exec_cmd(*cmd, env_list) == 0)
-		return 0;
-	printf("not a builtin or command");
-	return 0;
+	if (!cmd || !*cmd || !(*cmd)->argv || !(*cmd)->argv[0])
+		return (0);
+	bstatus = execute_builtin(*cmd, env_list);
+	if (bstatus != -1) // if it was a builtin
+		return (bstatus);
+	// printf("not a builtin or command");
+	return (exec_cmd(*cmd, env_list));
 }

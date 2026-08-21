@@ -85,6 +85,10 @@ char	**split_line(char const *s, char c);
 t_cmd	*lexer(char *line);
 
 
+// error
+void	free_array(char **array);
+void	err_exit(char *cmd, char *msg, int code);
+
 // exec
 int executor(t_cmd **cmd, t_env **env_list);
 
