@@ -2,13 +2,14 @@
 #ifndef MINISHELL_H
 #define MINISHELL_H
 
+# include "libft.h"
 # include <stdio.h>
 # include <unistd.h>
 # include <stdlib.h>
 # include <signal.h>
+# include <fcntl.h>
 # include <readline/readline.h>
 # include <readline/history.h>
-# include "libft.h"
 # include <sys/types.h>
 # include <sys/wait.h>
 // # include <linux/limits.h>
@@ -35,7 +36,7 @@ typedef enum e_redir_type
 typedef struct s_redir
 {
 	t_redir_type    type;
-	char            *file;        // heredoc file name or heredoc delimiter
+	char            *file;        // heredoc file name or heredoc delimiter or out file path
 	int             was_quoted;   // 1 if ' ' or " " 0 if not
 	int             heredoc_fd;   // heredoc filedescriptor (-1 if not a heredoc)
 	struct s_redir  *next;
