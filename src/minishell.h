@@ -8,7 +8,7 @@
 # include <signal.h>
 # include <readline/readline.h>
 # include <readline/history.h>
-# include "../libft/libft.h"
+# include "libft.h"
 # include <sys/types.h>
 # include <sys/wait.h>
 // # include <linux/limits.h>
@@ -72,7 +72,7 @@ int	b_pwd();
 int	b_cd(char **argv, t_env **env_list);
 int	b_echo(char **args);
 int	b_exit(char **args, t_env **env_list); // TODO: int lstatus
-int	b_env(t_env **env_list);
+int	b_env(t_env **env_list); // TODO
 int	b_unset(char **args, t_env **env_list);
 int	b_export(char **args, t_env **env_list);
 
@@ -91,6 +91,7 @@ void	err_exit(char *cmd, char *msg, int code);
 
 // exec
 int executor(t_cmd **cmd, t_env **env_list);
+int exec_redirs(t_redir *redirs);
 
 
 #endif
