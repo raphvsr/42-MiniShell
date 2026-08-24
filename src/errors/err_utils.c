@@ -1,6 +1,13 @@
 
 #include "minishell.h"
 
+void	err_warn(char *cmd, char *msg1, char *msg2)
+{
+    ft_putstr_fd(msg1, 2);
+    ft_putstr_fd(cmd, 2);
+    ft_putendl_fd(msg2, 2);
+}
+
 void	err_exit(char *cmd, char *msg, int code)
 {
     ft_putstr_fd("minishell: ", 2);

@@ -12,7 +12,7 @@
 # include <readline/history.h>
 # include <sys/types.h>
 # include <sys/wait.h>
-// # include <linux/limits.h>
+# include <linux/limits.h>
 
 typedef struct s_env {
 	char            *key;
@@ -36,7 +36,7 @@ typedef enum e_redir_type
 typedef struct s_redir
 {
 	t_redir_type    type;
-	char            *file;        // heredoc file name or heredoc delimiter or out file path
+	char            *file;        // file name OR heredoc delimiter
 	int             was_quoted;   // 1 if ' ' or " " 0 if not
 	int             heredoc_fd;   // heredoc filedescriptor (-1 if not a heredoc)
 	struct s_redir  *next;
@@ -79,6 +79,7 @@ int	b_export(char **args, t_env **env_list);
 
 // signals
 void init_signals(void);
+extern volatile sig_atomic_t g_signal;
 
 // parsing
 // int		symbol(char c);
@@ -89,6 +90,7 @@ t_cmd	*lexer(char *line);
 // error
 void	free_array(char **array);
 void	err_exit(char *cmd, char *msg, int code);
+void	err_warn(char *cmd, char *msg1, char *msg2);
 
 // exec
 int executor(t_cmd **cmd, t_env **env_list);
