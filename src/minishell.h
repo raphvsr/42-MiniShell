@@ -14,24 +14,28 @@
 # include <sys/wait.h>
 # include <linux/limits.h>
 
+<<<<<<< HEAD
 typedef struct s_env
 {
-	char            *key;
-	char            *value;
-	struct s_env    *next;
-} t_env;
-
+=======
 
 // redirections
 typedef enum e_redir_type
 {
+	TOKEN_WORD,
+	TOKEN_PIPE,     // | 
 	REDIR_IN,      // <
-	REDIR_OUT,     // >
+	REDIR_OUT,     // >      // token_out ??
 	REDIR_APPEND,  // >>
 	REDIR_HEREDOC  // <<
 }   t_redir_type;
 
-
+typedef struct s_env {
+>>>>>>> 4afdc70 (feat(lexer): implement working lexer)
+	char            *key;
+	char            *value;
+	struct s_env    *next;
+} t_env;
 
 // 1. struct de redirections (<, >, >>, <<)
 typedef struct s_redir
@@ -52,6 +56,13 @@ typedef struct s_cmd
 	struct s_cmd    *next;        // commande suivante après le pipe '|'
 }   t_cmd;
 
+typedef struct s_token
+{
+    char            *value;      // "echo", "hi", "|", ">>"...
+    int             type;
+    int             quoted;      // 0 = pas quoté, 1 = simple, 2 = double
+    struct s_token  *next;
+}   t_token;
 
 
 // env ($printenv)
@@ -83,10 +94,8 @@ void init_signals(void);
 extern volatile sig_atomic_t g_signal;
 
 // parsing
-// int		symbol(char c);
-char	**split_line(char const *s, char c);
-t_cmd	*lexer(char *line);
-
+int		sym(char c);
+t_token	*lexer(char *line);
 
 // error
 void	free_array(char **array);
@@ -99,6 +108,3 @@ int exec_redirs(t_redir *redirs);
 
 
 #endif
-
-
-

@@ -6,11 +6,11 @@
 /*   By: kheda <kheda@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/14 01:36:20 by kheda             #+#    #+#             */
-/*   Updated: 2026/08/18 19:21:28 by kheda            ###   ########.fr       */
+/*   Updated: 2026/08/27 18:46:22 by kheda            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+#include "minishell.h"
 
 static int	free_all(char **tab, int len)
 {
@@ -26,31 +26,73 @@ static int	free_all(char **tab, int len)
 	return (0);
 }
 
-static int    count_words(char const *s, char c)
+void	create_token(char *s, char quote, int type) // le type WORD etc 
+{
+	t_token *token;
+	// int	i;
+
+	token = malloc(sizeof(token));
+	if (!token)
+		return;
+	// i = 0;
+	// while (s[i])
+	token->value = s; // adresse de la chaine donc on aura tout a partir de cette adresse ?
+	token->type = type;   // probleme ? il faut un len d'arret, et pas toute la chaine
+	if (quote == '\'')
+		token->quoted = 1;
+	else if (quote == '"')
+		token->quoted = 2;
+	else
+		token->quoted = 0;
+										// token->quoted = quoted_type_number; ??
+	// token = token->next; // ? here
+}
+
+static int	count_words(char const *s, char c)
 {
 	int	i;
+	char quote;
 	int	cpt;
-	int	flag = 6;
-
+	
 	i = 0;
 	cpt = 0;
 	while (s[i])
 	{
-		if (s[i] != c && (s[i + 1] == c || s[i + 1] == '\0'))
-			cpt++;
-		else if (s[i] == '\'' || s[i] == '"')
-			flag = 1;
-		while (flag == 1 && s[i])
+		while (s[i] == c && s[i])
+			i++;
+		if (s[i] == '\0')
+			break;
+		else if (s[i] == '|' || s[i] == '<' || s[i] == '>')
 		{
-			if ((s[i + 1] == '\'' || s[i + 1] == '"'))
-				flag = 0;
-			if (flag == 0 && (s[i + 1] == c || s[i + 1] == '\0'))
-				cpt++;
+			if (s[i] == s[i + 1] && s[i + 1] != '|')
+				i = i + 2;
 			else
 				i++;
 		}
-		i++;
+		else
+		{
+			while (s[i] && !sym(s[i]))
+			{
+				if (s[i] == '\'' || s[i] == '"')
+				{
+					quote = s[i];
+					i++;
+					while (s[i] != quote && s[i] != '\0')
+						i++;
+					if (s[i] == '\0')
+						return (5); // 0
+					// create_token(&s, quote, 1); // 1 -> type WORD en vrai
+					quote = 0;
+					i++;
+				}
+				else
+					i++;
+				// create_token(&s, 'a', 1); // 1 -> type WORD en vrai, a -> simplier, but can do any alphabetic character
+			}
+		}
+		cpt++;
 	}
+	printf("%d\n", cpt);
 	return (cpt);
 }
 
@@ -77,26 +119,29 @@ static int	fill(char **tab, char const *s, char c)
 	int	i;
 	int	start;
 	int	index;
-	int	flag = 6;
+	int	flag;
 
 	i = 0;
 	index = 0;
+	flag = 0;
 	while (s[i])
 	{
 		while (s[i] && s[i] == c)
 			i++;
-		if ((s[i] == '\'' || s[i] == '"') || (s[i + 1] == '\'' || s[i + 1] == '"'))
+		if ((s[i] == '\'' || s[i] == '"')) //|| (s[i + 1] == '\'' || s[i + 1] == '"')
 			flag = 1;
 		start = i;
 		while (s[i])
 		{
-			if (flag == 1 && (s[i] == '\'' || s[i] == '"') && s[i + 1] == c)
+			if ((s[i] == '\'' || s[i] == '"'))
+				flag = 1;
+			if (flag == 1 && (s[i + 1] == '\'' || s[i + 1] == '"')) // && s[i + 1] == c
 			{
 				flag = 0;
-				i++;
+				i = i + 2;
 				break;
 			}
-			else if (s[i] == c && flag != 1)
+			else if (s[i] == c && flag == 0) // && !sym(s[i])
 				break;
 			i++;
 		}

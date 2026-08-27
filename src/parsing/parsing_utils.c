@@ -1,9 +1,6 @@
-#include "libft.h"
-#include "minishell.h"
+// #include "minishell.h"
 
-int	symbol(char c)
+int	sym(char c)
 {
-	if (c == '\'' || c == '"' || c == '|') // pipe, >>, <<, ...
-		return (1);
-	return (0);
+	return (c == ' ' || c == '|' || c == '<' || c == '>' || c == '&');
 }
