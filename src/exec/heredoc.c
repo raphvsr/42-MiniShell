@@ -47,6 +47,8 @@ int heredoc(t_cmd *cmd)
 	while (cmd)
 	{
 		t_redir *curr_redir;
+
+		curr_redir = cmd->redirs;
 		while (curr_redir)
 		{
 			if (curr_redir->type == REDIR_HEREDOC)

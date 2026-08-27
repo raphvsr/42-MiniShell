@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: rvasseur <rvasseur@student.42.fr>          +#+  +:+       +#+         #
+#    By: rvasseur <raphael.vasseur@proton.me>       +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2026/05/30 12:00:00 by p0ubelle          #+#    #+#              #
-#    Updated: 2026/08/27 02:33:11 by rvasseur         ###   ########.fr        #
+#    Updated: 2026/08/27 14:41:14 by rvasseur         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -56,6 +56,9 @@ fclean: clean
 	rm -f $(NAME)
 
 re: fclean all
+
+test_redirs: $(LIBFT)
+	$(CC) -g3 $(CFLAGS) $(INCLUDES) test_redirs.c src/exec/*.c src/env/*.c src/builtins/*.c src/errors/*.c src/signals/*.c $(LIBFT) -lreadline -o test_redirs ./test_redirs
 
 bonus: all
 
