@@ -9,6 +9,7 @@ static int input_handler(t_redir *redir)
 	if (redir->type == REDIR_IN)
 	{
 		fd = open(redir->file, O_RDONLY);
+		if (fd < 0)
 		{
 			perror(redir->file);
 			return (1);
@@ -49,6 +50,7 @@ static int output_handler(t_redir *redir)
 	if (redir->type == REDIR_APPEND)
 	{
 		fd = open(redir->file, O_WRONLY | O_CREAT | O_APPEND, 0644);
+		if (fd < 0)
 		{
 			perror(redir->file);
 			return (1);

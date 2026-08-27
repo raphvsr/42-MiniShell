@@ -54,6 +54,8 @@ static char *f_cmdpath(char *cmd, t_env *env_list)
 
 static void cprocess(char *cmd_path, t_cmd *cmd, char **array_env)
 {
+	if (exec_redirs(cmd->redirs) != 0)
+		exit(1);
 	if (!cmd_path)
 		err_exit(cmd->argv[0], ": command not found", 127);
 	if (access(cmd_path, F_OK) != 0) // if we cant exec the cmd
@@ -99,12 +101,16 @@ int exec_cmd(t_cmd *cmd, t_env **env_list)
 	return 0;
 }
 
+int	heredoc(t_cmd *cmd);
+
 int executor(t_cmd **cmd, t_env **env_list)
 {
 	int bstatus;
 
 	if (!cmd || !*cmd || !(*cmd)->argv || !(*cmd)->argv[0])
 		return (0);
+	if (heredoc(*cmd) != 0)
+		return (1);
 	bstatus = execute_builtin(*cmd, env_list);
 	if (bstatus != -1) // if it was a builtin
 		return (bstatus);
