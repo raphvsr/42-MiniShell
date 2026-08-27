@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: rvasseur <raphael.vasseur@proton.me>       +#+  +:+       +#+         #
+#    By: rvasseur <rvasseur@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2026/05/30 12:00:00 by p0ubelle          #+#    #+#              #
-#    Updated: 2026/08/21 09:31:46 by rvasseur         ###   ########.fr        #
+#    Updated: 2026/08/27 02:33:11 by rvasseur         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -29,8 +29,8 @@ SRCS        =	src/main.c \
 				src/parsing/parsing_utils.c \
 				src/parsing/lexer/split_line.c \
 				src/parsing/lexer/lexer.c \
-				src/env/env_utils3.c
-# 				src/signals/signals.c
+				src/env/env_utils3.c \
+ 				src/signals/signals.c
 
 OBJS        = $(SRCS:.c=.o)
 

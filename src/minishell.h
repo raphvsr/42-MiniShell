@@ -14,7 +14,8 @@
 # include <sys/wait.h>
 # include <linux/limits.h>
 
-typedef struct s_env {
+typedef struct s_env
+{
 	char            *key;
 	char            *value;
 	struct s_env    *next;
