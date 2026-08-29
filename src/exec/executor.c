@@ -1,7 +1,6 @@
 
 #include "minishell.h"
 
-
 int execute_builtin(t_cmd *cmd, t_env **env_list)
 {
 	if (ft_strncmp(cmd->argv[0], "echo", 5) == 0)
@@ -101,19 +100,24 @@ int exec_cmd(t_cmd *cmd, t_env **env_list)
 	return 0;
 }
 
-int	heredoc(t_cmd *cmd);
-
 int executor(t_cmd **cmd, t_env **env_list)
 {
-	int bstatus;
+	int status;
 
 	if (!cmd || !*cmd || !(*cmd)->argv || !(*cmd)->argv[0])
 		return (0);
 	if (heredoc(*cmd) != 0)
 		return (1);
-	bstatus = execute_builtin(*cmd, env_list);
-	if (bstatus != -1) // if it was a builtin
-		return (bstatus);
-	// printf("not a builtin or command");
+	if (is_buildin == 0) // if it was a builtin
+	{
+		int in = dup(0);
+		int out = dup(1);
+		if (exec_redirs((*cmd)->redirs) != -1)
+			status = 1;
+		else
+			status = execute_builtin(*cmd, env_list);
+
+	}
+	return (status);
 	return (exec_cmd(*cmd, env_list));
 }
