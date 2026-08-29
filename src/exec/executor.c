@@ -108,16 +108,19 @@ int executor(t_cmd **cmd, t_env **env_list)
 		return (0);
 	if (heredoc(*cmd) != 0)
 		return (1);
-	if (is_buildin == 0) // if it was a builtin
+	if (is_buildin((*cmd)->argv[0]))
 	{
 		int in = dup(0);
 		int out = dup(1);
-		if (exec_redirs((*cmd)->redirs) != -1)
+		if (exec_redirs((*cmd)->redirs) != 0)
 			status = 1;
 		else
 			status = execute_builtin(*cmd, env_list);
-
+		dup2(in, 0);
+		dup2(out, 1);
+		close(in);
+		close(out);
 	}
+	exec_cmd(*cmd, env_list); // ? whre to put that
 	return (status);
-	return (exec_cmd(*cmd, env_list));
 }

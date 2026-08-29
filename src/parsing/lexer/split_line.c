@@ -26,27 +26,27 @@ static int	free_all(char **tab, int len)
 	return (0);
 }
 
-void	create_token(char *s, char quote, int type) // le type WORD etc 
-{
-	t_token *token;
-	// int	i;
-
-	token = malloc(sizeof(token));
-	if (!token)
-		return;
-	// i = 0;
-	// while (s[i])
-	token->value = s; // adresse de la chaine donc on aura tout a partir de cette adresse ?
-	token->type = type;   // probleme ? il faut un len d'arret, et pas toute la chaine
-	if (quote == '\'')
-		token->quoted = 1;
-	else if (quote == '"')
-		token->quoted = 2;
-	else
-		token->quoted = 0;
-										// token->quoted = quoted_type_number; ??
-	// token = token->next; // ? here
-}
+// void	create_token(char *s, char quote, int type) // le type WORD etc 
+// {
+// 	t_token *token;
+// 	// int	i;
+// 
+// 	token = malloc(sizeof(t_token));
+// 	if (!token)
+// 		return;
+// 	// i = 0;
+// 	// while (s[i])
+// 	token->value = s; // adresse de la chaine donc on aura tout a partir de cette adresse ?
+// 	token->type = type;   // probleme ? il faut un len d'arret, et pas toute la chaine
+// 	if (quote == '\'')
+// 		token->quoted = 1;
+// 	else if (quote == '"')
+// 		token->quoted = 2;
+// 	else
+// 		token->quoted = 0;
+// 										// token->quoted = quoted_type_number; ??
+// 	// token = token->next; // ? here
+// }
 
 static int	count_words(char const *s, char c)
 {

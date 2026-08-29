@@ -51,7 +51,7 @@ t_token	*create_token(char *s, char quote, int start, int len)
 		new_token->quoted = 2;
 	else
 		new_token->quoted = 0;
- 
+
 	// printf("%s\n", token->value);
 	new_token->next = NULL;
 	token_type(new_token, s, start);
@@ -126,7 +126,7 @@ t_token	*lexer(char *line)
 			add_back(&head, create_token(line, 0, i, len - i)); // can put any character to idicate 'WORD', or just remove parameter quote
 			i = len;
 		}
-		else 
+		else
 			i = token_word(&head, line, i);
 	}
 	return (head);
@@ -155,7 +155,7 @@ t_token	*lexer(char *line)
 // 				printf("NO\n");
 // 			else
 // 				printf("OK\n");
-			
+
 // 		}
 // 		free(line);
 // 	}

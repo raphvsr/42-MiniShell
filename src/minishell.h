@@ -14,28 +14,23 @@
 # include <sys/wait.h>
 # include <linux/limits.h>
 
-<<<<<<< HEAD
 typedef struct s_env
 {
-=======
+	char            *key;
+	char            *value;
+	struct s_env    *next;
+} t_env;
 
 // redirections
 typedef enum e_redir_type
 {
 	TOKEN_WORD,
-	TOKEN_PIPE,     // | 
+	TOKEN_PIPE,     // |
 	REDIR_IN,      // <
 	REDIR_OUT,     // >      // token_out ??
 	REDIR_APPEND,  // >>
 	REDIR_HEREDOC  // <<
 }   t_redir_type;
-
-typedef struct s_env {
->>>>>>> 4afdc70 (feat(lexer): implement working lexer)
-	char            *key;
-	char            *value;
-	struct s_env    *next;
-} t_env;
 
 // 1. struct de redirections (<, >, >>, <<)
 typedef struct s_redir
@@ -88,6 +83,7 @@ int	b_exit(char **args, t_env **env_list); // TODO: int lstatus
 int	b_env(t_env **env_list); // TODO
 int	b_unset(char **args, t_env **env_list);
 int	b_export(char **args, t_env **env_list);
+int is_buildin(char *cmd);
 
 // signals
 void init_signals(void);
@@ -105,6 +101,6 @@ void	err_warn(char *cmd, char *msg1, char *msg2);
 // exec
 int executor(t_cmd **cmd, t_env **env_list);
 int exec_redirs(t_redir *redirs);
-
+int heredoc(t_cmd *cmd);
 
 #endif

@@ -46,10 +46,9 @@ static int output_handler(t_redir *redir)
 		dup2(fd, STDOUT_FILENO);
 		close(fd);
 	}
-
 	if (redir->type == REDIR_APPEND)
 	{
-		fd = open(redir->file, O_WRONLY | O_CREAT | O_APPEND, 0644);
+		fd = open(redir->file, O_WRONLY | O_CREAT | O_APPEND, 0644); // 0644 code permission
 		if (fd < 0)
 		{
 			perror(redir->file);
@@ -80,8 +79,8 @@ int exec_redirs(t_redir *redirs)
 			status = output_handler(redirs);
 		}
 		if (status == 1)
-			return (status);
+			return (1);
 		redirs = redirs->next;
 	}
-	return (0);
+	return (1);
 }
