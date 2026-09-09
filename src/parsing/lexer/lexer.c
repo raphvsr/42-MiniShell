@@ -1,6 +1,20 @@
 #include "../../minishell.h"
 #include "../../../libft/libft.h"
 
+void	free_token(t_token **list)
+{
+	t_token *tmp;
+
+	while (*list)
+	{
+		tmp = *list;
+		*list = (*list)->next;
+		free(tmp->value);
+		free(tmp);
+	}
+	printf("=");
+}
+
 void	add_back(t_token **list, t_token *new)
 {
 	t_token *current;
@@ -18,7 +32,7 @@ void	add_back(t_token **list, t_token *new)
 	current->next = new;
 }
 
-void	token_type(t_token *new_token, char *s, int i)
+static void	token_type(t_token *new_token, char *s, int i)
 {
 	if (s[i] == '|')
 		new_token->type = TOKEN_PIPE;
@@ -31,74 +45,79 @@ void	token_type(t_token *new_token, char *s, int i)
 	else if (s[i] == '>')
 		new_token->type = REDIR_OUT;
 	else
-		new_token->type = TOKEN_WORD; // check type & ?
+		new_token->type = TOKEN_WORD;
 }
 
-t_token	*create_token(char *s, char quote, int start, int len)
+static t_token	*create_token(t_token **list, char *s, char quote, int start, int len)
 {
 	t_token	*new_token;
-
-	printf("create : start : %d, len : %d\n", start, len);
 
 	new_token = malloc(sizeof(t_token));
 	if (!new_token)
 		return (NULL);
 
-	new_token->value = ft_substr(s, start, len);   // adresse de la chaine donc on aura tout a partir de cette adresse ?         // NON CAR JE VAIS JUSQU'A LEN.
-	if (quote == '\'')    // probleme ? il faut un len d'arret, et pas toute la chaine                  // exactement.
+	new_token->value = ft_substr(s, start, len);
+	if (!new_token->value)
+		return (free_token(list), NULL);  //free_tokens ??? FREE
+	if (quote == '\'')
 		new_token->quoted = 1;
 	else if (quote == '"')
 		new_token->quoted = 2;
 	else
 		new_token->quoted = 0;
  
-	// printf("%s\n", token->value);
 	new_token->next = NULL;
 	token_type(new_token, s, start);
-	return (new_token); ////
+	return (new_token);
 }
-// TODO : recuperer la longuer, le debut du mot et sa fin (pour remplir structure value)
 
+static int	token(t_token **list, char *s, int i)
+{
+	int	len;
+	t_token *new;
 
-// int	token(t_token **list, char *s, int i)
-// {
-// 	int	len;
+	printf("type\n");
+	if (s[i] == s[i + 1] && s[i + 1] != '|')
+		len = i + 2;
+	else
+		len = i + 1;
 
-// 	printf("type\n");
-// 	if (s[i] == s[i + 1] && s[i + 1] != '|')
-// 		len = i + 2;
-// 	else
-// 		len = i + 1; // why i++ was infinit loop ? //wait i can do i++ when i do something = something !?
+	new = create_token(list, s, 0, i, len - i);
+	if (!new)
+		return (0);
+	add_back(list, new);
+	// printf("\n======== %d ========\n", REDIR_APPEND);
+	return (len);
+}
 
-// 	add_back(list, create_token(s, 0, i, len - i)); // can put any character to idicate 'WORD', or just remove parameter quote
-// 	// printf("\n======== %d ========\n", REDIR_APPEND);
-// 	return (len);
-// }
-
-int	token_word(t_token **list, char *line, int i)
+static int	token_word(t_token **list, char *line, int i)
 {
 	int		start;
 	char	quote;
+	t_token	*new;
 
 	start = i;
 	quote = 0;
 	while (line[i] != ' ' && line[i] && !sym(line[i]))
 	{
-		// printf("----");
 		if (line[i] == '\'' || line[i] == '"')
 		{
 			quote = line[i];
 			i++;
 			while (line[i] != quote && line[i])
 				i++;
+			if (!line[i])
+				return (0); //ERREUR MESSAGE (unclosed quote)
 			i++;
 		}
 		else
 			i++;
 	}
 	printf("word : start: %d - len: %d\n", start, i);
-	add_back(list, create_token(line, quote, start, i - start));
-	quote = 0;
+	if (!(new = create_token(list, line, quote, start, i - start)))
+		return (0);
+	add_back(list, new);
+	// quote = 0; // maybe no need, bcz the function will restart with quote = 0 on top
 	return (i);
 }
 
@@ -118,57 +137,56 @@ t_token	*lexer(char *line)
 			break ;
 		if (sym(line[i]) && line[i] != ' ')
 		{
-			if (line[i] == line[i + 1] && line[i + 1] != '|')
-				len = i + 2;
-			else
-				len = i + 1;
-			// printf("====%c, %c====", line[i], line[i+1]);
-			add_back(&head, create_token(line, 0, i, len - i)); // can put any character to idicate 'WORD', or just remove parameter quote
-			i = len;
+			if (!(i = token(&head, line, i)))
+				return (free_token(&head), NULL); // free here ?        // MESSAGE ERREUR //FREE
 		}
 		else 
+		{
 			i = token_word(&head, line, i);
+			if (!i)
+				return (free_token(&head), NULL); //free here ? or in main     // MESSAGE ERREUR //FREE
+		}
 	}
 	return (head);
 }
 
-// int	main()
-// {
-// 	char	*line;
-// 	t_token	*token;
+int	main()
+{
+	char	*line;
+	t_token	*token;
 
-// 	token = NULL;
+	token = NULL;
 
-// 	while (1)
-// 	{
-// 		line = readline("SHELL> ");
-// 		if (!line)
-// 		{
-// 			printf("exit\n");
-// 			break;
-// 		}
-// 		if (*line) // no need ?
-// 		{
-// 			add_history(line);
-// 			token = lexer(line);
-// 			if (!token)
-// 				printf("NO\n");
-// 			else
-// 				printf("OK\n");
+	while (1)
+	{
+		line = readline("SHELL> ");
+		if (!line)
+		{
+			printf("exit\n");
+			break;
+		}
+		if (*line) // no need ?
+		{
+			add_history(line);
+			token = lexer(line);
+			if (!token)
+				printf("NO\n");
+			else
+				printf("OK\n");
 			
-// 		}
-// 		free(line);
-// 	}
+		}
+		free(line);
+	}
 
-// 	t_token *tmp = token;
-// 	while (tmp)
-// 	{
-// 		printf("---");
-// 		printf("%s, type : %d , quoted : %d\n", tmp->value, tmp->type, tmp->quoted);
-// 		tmp = tmp->next;
-// 	}
-// 	return 0;
-// }
+	t_token *tmp = token;
+	while (tmp)
+	{
+		printf("---");
+		printf("%s, type : %d , quoted : %d\n", tmp->value, tmp->type, tmp->quoted);
+		tmp = tmp->next;
+	}
+	return 0;
+}
 
 
 // to compile separately
@@ -183,3 +201,19 @@ t_token	*lexer(char *line)
 // echo "hi -> ne devrait pas marcher
 //echo hello echo "hello" 'world' | OR << OR >> OR >
 //echo "nevermind" || grep "never mind"
+// echo 'sd' d's -> ca doit marcher ?
+
+// TODO : check if free is done, and on a good place
+// TODO : check if symbol is as the first command, should not do anything (did, check again to be sure)
+// TODO : \ (backslash) or ; (semicolon)
+// TODO : || -> cree une erreur
+// TODO : head->type == TOKEN_PIPE || head->type == REDIR_IN)  // check any symbol // PARSING
+
+
+// > eww -> marche
+// | dhfj -> NO
+// >> eww -> marche
+// << df -> marche
+// < -> NO
+// echo 'sd' d's -> NO
+// "      " -> ca doit marcher ? apparement oui
