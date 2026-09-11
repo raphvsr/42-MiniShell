@@ -3,17 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-<<<<<<< HEAD
-#    By: rvasseur <raphael.vasseur@proton.me>       +#+  +:+       +#+         #
-#                                                 +#+#+#+#+#+   +#+            #
-#    Created: 2026/05/30 12:00:00 by p0ubelle          #+#    #+#              #
-#    Updated: 2026/08/27 14:41:14 by rvasseur         ###   ########.fr        #
-=======
 #    By: kheda <kheda@student.42.fr>                +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2026/05/30 12:00:00 by p0ubelle          #+#    #+#              #
-#    Updated: 2026/08/21 19:48:38 by kheda            ###   ########.fr        #
->>>>>>> 4afdc70 (feat(lexer): implement working lexer)
+#    Updated: 2026/09/11 03:25:05 by kheda            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -36,8 +29,12 @@ SRCS        =	src/main.c \
 				src/parsing/parsing_utils.c \
 				src/parsing/lexer/split_line.c \
 				src/parsing/lexer/lexer.c \
+				src/parsing/lexer/lexer_utils.c \
+				src/parsing/parser/parser_utils.c \
+				src/parsing/parser/parser.c \
 				src/env/env_utils3.c \
  				src/signals/signals.c
+				
 
 OBJS        = $(SRCS:.c=.o)
 
