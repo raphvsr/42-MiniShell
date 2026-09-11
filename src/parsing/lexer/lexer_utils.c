@@ -1,0 +1,59 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   lexer_utils.c                                      :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: kheda <kheda@student.42.fr>                +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/09/11 02:46:16 by kheda             #+#    #+#             */
+/*   Updated: 2026/09/11 02:46:20 by kheda            ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#include "../../minishell.h"
+#include "../../../libft/libft.h"
+
+void	free_token(t_token **list)
+{
+	t_token *tmp;
+
+	while (*list)
+	{
+		tmp = *list;
+		*list = (*list)->next;
+		free(tmp->value);
+		free(tmp);
+	}
+	printf("=");
+}
+
+void	add_back(t_token **list, t_token *new)
+{
+	t_token *current;
+
+	if (!list || !new)
+		return;
+	if (!*list)
+	{
+		*list = new;
+		return;
+	}
+	current = *list;
+	while (current->next)
+		current = current->next;
+	current->next = new;
+}
+
+int	find_end_quote(char *line, int *i)
+{
+	char	quote;
+	
+	quote = line[*i];
+	(*i)++;
+	while (line[*i] != quote && line[*i])
+		(*i)++;
+	if (!line[*i])
+		return (0); //ERREUR MESSAGE (unclosed quote)
+	(*i)++;
+	return (1);
+}
