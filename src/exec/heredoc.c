@@ -11,16 +11,16 @@ int read_heredoc(t_redir *redir)
 		return (perror("minishell: heredoc pipe"), 1);
 	while (1)
 	{
+		line = readline("> ");
 		if (g_signal == SIGINT)
 		{
 			close(fd[0]);
 			close(fd[1]);
 			return (1);
 		}
-		line = readline("> ");
 		if (line == NULL)
 		{
-			err_warn(redir->file, ": warning: here-document"
+			err_warn(redir->file, ": warning: here-document "
 				"delimited by end-of-file (wanted `",
 				"')");
 			break;
@@ -30,8 +30,7 @@ int read_heredoc(t_redir *redir)
 			free(line);
 			break;
 		}
-		write(fd[1], line, ft_strlen(line));
-		write(fd[1], "\n", 1);
+		ft_putendl_fd(line, fd[1]);
 		free(line);
 	}
 	close(fd[1]);
@@ -51,8 +50,8 @@ int heredoc(t_cmd *cmd)
 			if (curr_redir->type == REDIR_HEREDOC)
 			{
 				if (!curr_redir->file)
-					return(write(2, "minishell: syntax error near"
-						" unexpected token `newline'", 56), 1);
+					return(err_warn("syntax error near "
+						"unexpected token ", curr_redir->file, ""), 1);
 				if (read_heredoc(curr_redir) != 0)
 					return (1);
 			}

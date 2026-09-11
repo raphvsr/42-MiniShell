@@ -1,7 +1,7 @@
 
 #include "minishell.h"
 
-int execute_builtin(t_cmd *cmd, t_env **env_list)
+int	execute_builtin(t_cmd *cmd, t_env **env_list, int status)
 {
 	if (ft_strncmp(cmd->argv[0], "echo", 5) == 0)
 		return (b_echo(cmd->argv));
@@ -16,12 +16,12 @@ int execute_builtin(t_cmd *cmd, t_env **env_list)
 	if (ft_strncmp(cmd->argv[0], "env", 4) == 0)
 		return (b_env(env_list));
 	if (ft_strncmp(cmd->argv[0], "exit", 5) == 0)
-		return (b_exit(cmd->argv, env_list));
+		return (b_exit(cmd->argv, env_list, status));
 	return (-1); // not a buildin
 }
 
 
-static char *f_cmdpath(char *cmd, t_env *env_list)
+char *f_cmdpath(char *cmd, t_env *env_list)
 {
 	t_env *path;
 	char **paths_values;
@@ -50,19 +50,23 @@ static char *f_cmdpath(char *cmd, t_env *env_list)
 	return (free_array(paths_values), NULL);
 }
 
-
-static void cprocess(char *cmd_path, t_cmd *cmd, char **array_env)
+void cprocess(char *cmd_path, t_cmd *cmd, char **array_env)
 {
 	if (exec_redirs(cmd->redirs) != 0)
 		exit(1);
 	if (!cmd_path)
 		err_exit(cmd->argv[0], ": command not found", 127);
-	if (access(cmd_path, F_OK) != 0) // if we cant exec the cmd
+	if (opendir(cmd_path) != 0) // if its a directory
+	{
+		err_warn("", cmd->argv[0], ": Is a directory");
+		exit(126);
+	}
+	if (access(cmd_path, F_OK) != 0) // if we cant find the command
 	{
 		perror(cmd->argv[0]);
 		exit(127);
 	}
-		if (access(cmd_path, X_OK) != 0) // if we cant exec the cmd
+	if (access(cmd_path, X_OK) != 0) // if we cant exec the command
 	{
 		perror(cmd->argv[0]);
 		exit(126);
@@ -72,55 +76,17 @@ static void cprocess(char *cmd_path, t_cmd *cmd, char **array_env)
 	exit (1);						// so it will erase both those lines
 }
 
-
-int exec_cmd(t_cmd *cmd, t_env **env_list)
+int executor(t_cmd **cmd, t_env **env_list, int status)
 {
-	char	*cmd_path;
-	char	**array_env;
-	pid_t	pid;
-	int 	status;
-
-	cmd_path = f_cmdpath(cmd->argv[0], *env_list);
-	array_env = env_to_array(*env_list);
-	pid = fork();
-
-	if (pid < 0)
-	{
-		perror("minishell: fork");
-		free(cmd_path);
-		return (free_array(array_env), 1);
-	}
-	if (pid == 0)
-		cprocess(cmd_path, cmd, array_env);
-	waitpid(pid, &status, 0); // wait for child
-	free(cmd_path);
-	free_array(array_env);
-	if (WIFEXITED(status))
-		return (WEXITSTATUS(status));
-	return 0;
-}
-
-int executor(t_cmd **cmd, t_env **env_list)
-{
-	int status;
-
-	if (!cmd || !*cmd || !(*cmd)->argv || !(*cmd)->argv[0])
-		return (0);
-	if (heredoc(*cmd) != 0)
+	if (!cmd || !*cmd)
 		return (1);
-	if (is_buildin((*cmd)->argv[0]))
-	{
-		int in = dup(0);
-		int out = dup(1);
-		if (exec_redirs((*cmd)->redirs) != 0)
-			status = 1;
-		else
-			status = execute_builtin(*cmd, env_list);
-		dup2(in, 0);
-		dup2(out, 1);
-		close(in);
-		close(out);
-	}
-	exec_cmd(*cmd, env_list); // ? whre to put that
+	if (heredoc(*cmd) != 0)
+		return (130);
+	if ((*cmd)->argv && (*cmd)->argv[0] &&
+		is_buildin((*cmd)->argv[0]) && !(*cmd)->next) // for 1 single builtin
+		status = exec_one_builtin(*cmd, env_list, status);
+	else
+		status = exec_pipe(*cmd, env_list, status); // for everything else
+	close_herdocs(*cmd);
 	return (status);
 }

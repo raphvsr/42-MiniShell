@@ -6,7 +6,7 @@ static int input_handler(t_redir *redir)
 {
 	int fd;
 
-	if (redir->type == REDIR_IN)
+	if (redir->type == REDIR_IN) // for <
 	{
 		fd = open(redir->file, O_RDONLY);
 		if (fd < 0)
@@ -17,7 +17,7 @@ static int input_handler(t_redir *redir)
 		dup2(fd, STDIN_FILENO);
 		close(fd);
 	}
-	if (redir->type == REDIR_HEREDOC)
+	if (redir->type == REDIR_HEREDOC) // for <<
 	{
 		if (redir->heredoc_fd < 0)
 		{
@@ -26,7 +26,6 @@ static int input_handler(t_redir *redir)
 		}
 		dup2(redir->heredoc_fd, STDIN_FILENO);
 		close(redir->heredoc_fd);
-		// TODO: gestion du heredoc qui attend le mot cle
 	}
 	return (0);
 }
@@ -35,7 +34,7 @@ static int output_handler(t_redir *redir)
 {
 	int fd;
 
-	if (redir->type == REDIR_OUT)
+	if (redir->type == REDIR_OUT) // for >
 	{
 		fd = open(redir->file, O_WRONLY | O_CREAT | O_TRUNC, 0644);
 		if (fd < 0)
@@ -46,7 +45,7 @@ static int output_handler(t_redir *redir)
 		dup2(fd, STDOUT_FILENO);
 		close(fd);
 	}
-	if (redir->type == REDIR_APPEND)
+	if (redir->type == REDIR_APPEND) // for >>
 	{
 		fd = open(redir->file, O_WRONLY | O_CREAT | O_APPEND, 0644); // 0644 code permission
 		if (fd < 0)
@@ -82,5 +81,5 @@ int exec_redirs(t_redir *redirs)
 			return (1);
 		redirs = redirs->next;
 	}
-	return (1);
+	return (status);
 }

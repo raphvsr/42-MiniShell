@@ -3,17 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-<<<<<<< HEAD
 #    By: rvasseur <raphael.vasseur@proton.me>       +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2026/05/30 12:00:00 by p0ubelle          #+#    #+#              #
-#    Updated: 2026/08/27 14:41:14 by rvasseur         ###   ########.fr        #
-=======
-#    By: kheda <kheda@student.42.fr>                +#+  +:+       +#+         #
-#                                                 +#+#+#+#+#+   +#+            #
-#    Created: 2026/05/30 12:00:00 by p0ubelle          #+#    #+#              #
-#    Updated: 2026/08/21 19:48:38 by kheda            ###   ########.fr        #
->>>>>>> 4afdc70 (feat(lexer): implement working lexer)
+#    Updated: 2026/09/03 18:18:02 by rvasseur         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -27,15 +20,18 @@ LIBFT_DIR   = ./libft
 LIBFT       = $(LIBFT_DIR)/libft.a
 
 SRCS        =	src/main.c \
-				src/env/env_utils.c \
+				src/env/env_utils.c src/env/env_utils2.c \
 				src/builtins/cd.c src/builtins/echo.c src/builtins/exit.c src/builtins/env.c \
 				src/builtins/export.c src/builtins/pwd.c src/builtins/unset.c \
 				src/errors/free_env.c src/errors/err_utils.c \
-				src/env/env_utils2.c \
-				src/exec/executor.c \
+				src/exec/executor.c src/exec/exec_utils.c src/exec/redir.c src/exec/heredoc.c\
+				src/exec/executor2.c \
 				src/parsing/parsing_utils.c \
 				src/parsing/lexer/split_line.c \
 				src/parsing/lexer/lexer.c \
+				src/parsing/lexer/lexer_utils.c \
+				src/parsing/parser/parser_utils.c \
+				src/parsing/parser/parser.c \
 				src/env/env_utils3.c \
  				src/signals/signals.c
 
@@ -65,7 +61,7 @@ fclean: clean
 re: fclean all
 
 test_redirs: $(LIBFT)
-	$(CC) -g3 $(CFLAGS) $(INCLUDES) test_redirs.c src/exec/*.c src/env/*.c src/builtins/*.c src/errors/*.c src/signals/*.c $(LIBFT) -lreadline -o test_redirs ./test_redirs
+	$(CC) -g3 $(CFLAGS) $(INCLUDES) test_redirs.c src/exec/*.c src/env/*.c src/builtins/*.c src/errors/*.c src/signals/*.c $(LIBFT) -lreadline -o test_redirs && ./test_redirs
 
 bonus: all
 

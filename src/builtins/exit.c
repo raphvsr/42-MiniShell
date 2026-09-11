@@ -1,6 +1,27 @@
 
 #include "minishell.h"
 
+static int	digit_loop(const char *str, int *i, int sign, unsigned long long *res)
+{
+	unsigned long long	limit;
+	int					digit;
+
+	if (sign == 1)
+		limit = (unsigned long long)LLONG_MAX;
+	else
+		limit = (unsigned long long)LLONG_MAX + 1;
+	while (str[*i] >= '0' && str[*i] <= '9')
+	{
+		digit = str[*i] - '0';
+		if (*res > (limit - digit) / 10)
+			return (0);
+		*res = *res * 10 + digit;
+		(*i)++;
+	}
+	while ((str[*i] >= 9 && str[*i] <= 13) || str[*i] == ' ')
+		(*i)++;
+	return (str[*i] == '\0');
+}
 
 static int validate(const char *str, long long *cexit)
 {
@@ -16,26 +37,16 @@ static int validate(const char *str, long long *cexit)
 			sign = -1;
 		i++;
 	}
-	if (!str[i])
-		return 0;
-	while (str[i])
-	{
-		if (str[i] > '9' || str[i] < '0')
-			return (0);
-		res = res * 10 + str[i] - '0';
-		if ((sign == 1 && res > 9223372036854775807ULL)
-			|| (sign == -1 && res > 9223372036854775808ULL))
-			return (0);
-		i++;
-	}
+	if (!str[i] || str[i] < '0' || str[i] > '9')
+		return (0);
+	if (!digit_loop(str, &i, sign, &res))
+		return (0);
 	*cexit = (long long)(res * sign);
-	return 1; // return 1 or 0 (err) and store the number in *cexit
-	// otherwise if the user do exit -1 we dont know if its error -1
-	// or just number -1
+	return 1;
 }
 
 
-int b_exit(char **args, t_env **env_list) // TODO int lstatus (need for later exit code)
+int b_exit(char **args, t_env **env_list, int last_status)
 {
 	long long exit_code;
 
@@ -43,8 +54,8 @@ int b_exit(char **args, t_env **env_list) // TODO int lstatus (need for later ex
 	if(!args[1])
 	{
 		free_lenv(*env_list);
-		// exit((unsigned char)lstatus);
-		exit(1);
+		rl_clear_history();
+		exit((unsigned char)last_status);
 	}
 
 	if (!validate(args[1], &exit_code))

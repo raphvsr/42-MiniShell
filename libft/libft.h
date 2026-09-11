@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   libft.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: p0ubelle <p0ubelle@student.42.fr>          +#+  +:+       +#+        */
+/*   By: rvasseur <raphael.vasseur@proton.me>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/03 18:31:41 by rvasseur          #+#    #+#             */
-/*   Updated: 2026/08/17 09:52:05 by p0ubelle         ###   ########.fr       */
+/*   Updated: 2026/09/06 13:50:29 by rvasseur         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ int					ft_isdigit(int c);
 int					ft_isprint(int c);
 char				*ft_itoa(int n);
 void				*ft_memchr(const void *ptr, int ch, size_t count);
-int					ft_memcmp(const void *pointer1, const void *pointer2, size_t size);
+int					ft_memcmp(const void *ptr1, const void *ptr2, size_t size);
 void				*ft_memcpy(void *dest, const void *src, size_t count);
 void				*ft_memmove(void *dest, const void *src, size_t count);
 void				*ft_memset(void *ptr, int value, size_t size);
@@ -55,7 +55,6 @@ char				*ft_strtrim(char const *s1, char const *set);
 char				*ft_substr(char const *s, unsigned int start, size_t len);
 int					ft_tolower(int c);
 int					ft_toupper(int c);
-
 
 typedef struct s_list
 {

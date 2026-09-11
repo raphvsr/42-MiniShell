@@ -19,33 +19,16 @@ static int validate(char *arg)
     return 1;
 }
 
-
-
-// create a temporary pointer array to sort without mooving the real one
-void show_env(t_env *env_list)
+static void	sort(t_env **tab, int env_len)
 {
-	int i;
-	int j;
-	int env_len;
-	t_env **tab;
-	t_env *temp;
-
-	env_len = count_env(env_list);
-	if (env_len == 0)
-		return ;
-	if (!(tab = malloc(sizeof(t_env *) * env_len))) // t_env * = 8 bytes per slot
-		return ;
-	i = 0;
-	while (env_list) // we fill the new array
-	{
-		tab[i++] = env_list;
-		env_list = env_list->next;
-	}
+	int		i;
+	int		j;
+	t_env	*temp;
 	i = 0;
 	while (i < env_len)
 	{
 		j = i + 1;
-		while (j < env_len) // we sort the new array
+		while (j < env_len)
 		{
 			if (ft_strcmp(tab[i]->key, tab[j]->key) > 0)
 			{
@@ -57,6 +40,11 @@ void show_env(t_env *env_list)
 		}
 		i++;
 	}
+}
+
+static void	print(t_env **tab, int env_len)
+{
+	int	i;
 	i = 0;
 	while (i < env_len)
 	{
@@ -75,46 +63,56 @@ void show_env(t_env *env_list)
 		}
 		i++;
 	}
+}
+
+void	show_env(t_env *env_list)
+{
+	int		i;
+	int		env_len;
+	t_env	**tab;
+	env_len = count_env(env_list);
+	if (env_len == 0)
+		return ;
+	tab = malloc(sizeof(t_env *) * env_len);
+	if (!tab)
+		return ;
+	i = 0;
+	while (env_list)
+	{
+		tab[i++] = env_list;
+		env_list = env_list->next;
+	}
+	sort(tab, env_len);
+	print(tab, env_len);
 	free(tab);
 }
 
-int b_export(char **args, t_env **env_list)
+int	b_export(char **args, t_env **env_list)
 {
 	int		i;
 	int		cexport;
 	char	*key;
 	char	*value;
 
-	if (!args[1]) // without arguments just print sorted list
-		return(show_env(*env_list), 0);
-
-	// print error for invalid key and set cexport = 1
-	// but keep the loop to still export valid variables
-	i = 1;
+	if (!args[1])
+		return (show_env(*env_list), 0);
+	i = 0;
 	cexport = 0;
-	while (args[i])
+	while (args[++i])
 	{
-		if (!validate(args[i]))
-		{
-        	ft_putstr_fd("minishell: export: `", 2);
-			ft_putstr_fd(args[i], 2);
-			ft_putendl_fd("': not a valid identifier", 2);
-			cexport = 1;
-		}
+		if (!validate(args[i]) && ++cexport)
+			err_warn("export: `", args[i], "': not a valid identifier");
 		else
 		{
 			key = env_key(args[i]);
 			value = env_value(args[i]);
 			env_add_value(env_list, key, value);
-			free(key); // already ducplicated by env_add_value so we can free them
+			free(key);
 			free(value);
 		}
-		i++;
 	}
-	return (cexport);
+	return (cexport != 0);
 }
-
-
 
 
 

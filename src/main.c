@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rvasseur <rvasseur@student.42.fr>          +#+  +:+       +#+        */
+/*   By: rvasseur <raphael.vasseur@proton.me>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/06 19:22:28 by p0ubelle          #+#    #+#             */
-/*   Updated: 2026/08/29 19:39:56 by rvasseur         ###   ########.fr       */
+/*   Updated: 2026/09/11 00:49:42 by rvasseur         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,8 +18,9 @@ int	main(int ac, char **av, char **envp)
 	(void)av;
 	t_env 	*env;
 	t_token	*tokens;
+	t_cmd	*cmd;
 	char	*line;
-	int		status = 0; // FIXME: temp
+	int		status = 0;
 
 	env = init_env(envp);
 
@@ -30,22 +31,25 @@ int	main(int ac, char **av, char **envp)
 		line = readline("p0ubelle> ");
 		if (!line)
 		{
-			printf("exit\n");
+			ft_putendl_fd("exit", 2);
 			break;
 		}
-		if (*line) // no need ?
+		if (*line)
 		{
 			add_history(line);
-			printf("____result parsing____\n");
 			tokens = lexer(line);
-			(void)tokens;
-			// Once parser is implemented:
-			// command = parser(tokens);
-			// if (command && command->argv[0])
-			// 	status = executor(&command, &env);
+			if (tokens)
+			{
+				cmd = NULL;
+				if (parsing(&tokens, &cmd) && cmd)
+					status = executor(&cmd, &env, status);
+				free_cmd(&cmd);
+				free_token(&tokens);
+			}
 		}
 		free(line);
 	}
 	free_lenv(env);
+	rl_clear_history();
 	return (status);
 }

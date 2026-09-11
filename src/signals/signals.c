@@ -14,16 +14,21 @@ void sigint_handler(int signal)
 	rl_redisplay();
 }
 
-
-void init_signals(void)
+void	init_signals(void)
 {
 	signal(SIGINT, sigint_handler);  // for CTRL + C
 	signal(SIGQUIT, SIG_IGN);  // for CTRL + \ (SIGN_IGN = signal ignore)
 }
 
 
-void init_child_signals(void)
+void	init_csignals(void)
 {
     signal(SIGINT, SIG_DFL); // for child process we put back normal signals
     signal(SIGQUIT, SIG_DFL);
+}
+
+void	init_signals_exec(void)
+{
+	signal(SIGINT, SIG_IGN);
+	signal(SIGQUIT, SIG_IGN);
 }
