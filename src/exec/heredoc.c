@@ -8,10 +8,7 @@ int read_heredoc(t_redir *redir)
 	int fd[2];
 
 	if (pipe(fd) ==  -1)
-	{
-		perror("minishell: heredoc pipe");
-		return (1);
-	}
+		return (perror("minishell: heredoc pipe"), 1);
 	while (1)
 	{
 		if (g_signal == SIGINT)
