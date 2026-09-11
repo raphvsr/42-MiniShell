@@ -6,7 +6,7 @@
 #    By: rvasseur <raphael.vasseur@proton.me>       +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2026/05/30 12:00:00 by p0ubelle          #+#    #+#              #
-#    Updated: 2026/09/03 18:18:02 by rvasseur         ###   ########.fr        #
+#    Updated: 2026/09/11 21:30:00 by rvasseur         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -34,6 +34,7 @@ SRCS        =	src/main.c \
 				src/parsing/parser/parser.c \
 				src/env/env_utils3.c \
  				src/signals/signals.c
+				
 
 OBJS        = $(SRCS:.c=.o)
 

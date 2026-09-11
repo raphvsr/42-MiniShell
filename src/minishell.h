@@ -17,23 +17,22 @@
 # include <dirent.h>
 
 
-typedef struct s_env
-{
-	char            *key;
-	char            *value;
-	struct s_env    *next;
-} t_env;
-
 // redirections
 typedef enum e_redir_type
 {
 	TOKEN_WORD,
-	TOKEN_PIPE,     // |
+	TOKEN_PIPE,    // |
 	REDIR_IN,      // <
 	REDIR_OUT,     // >
 	REDIR_APPEND,  // >>
 	REDIR_HEREDOC  // <<
 }   t_redir_type;
+
+typedef struct s_env {
+	char            *key;
+	char            *value;
+	struct s_env    *next;
+} t_env;
 
 // 1. struct de redirections (<, >, >>, <<)
 typedef struct s_redir
@@ -87,7 +86,6 @@ int b_exit(char **args, t_env **env_list, int last_status);
 int	b_env(t_env **env_list); // TODO
 int	b_unset(char **args, t_env **env_list);
 int	b_export(char **args, t_env **env_list);
-int is_buildin(char *cmd);
 
 // signals
 void init_signals(void);
@@ -104,6 +102,8 @@ t_token	*lexer(char *line);
 
 // parsing
 int		parsing(t_token **tokens, t_cmd **head);
+
+// parsing
 void	free_argv(char **argv);
 void	free_redirs(t_redir *redir);
 void	free_cmd(t_cmd **cmd);
@@ -128,5 +128,6 @@ char *f_cmdpath(char *cmd, t_env *env_list);
 void cprocess(char *cmd_path, t_cmd *cmd, char **array_env);
 int	childs_status(pid_t last_pid);
 void close_herdocs(t_cmd *cmd);
+
 
 #endif

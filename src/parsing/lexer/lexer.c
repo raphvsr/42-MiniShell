@@ -1,24 +1,19 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   lexer.c                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: kheda <kheda@student.42.fr>                +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/09/11 02:46:26 by kheda             #+#    #+#             */
+/*   Updated: 2026/09/11 03:06:14 by kheda            ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../../minishell.h"
 #include "../../../libft/libft.h"
 
-void	add_back(t_token **list, t_token *new)
-{
-	t_token *current;
-
-	if (!list || !new)
-		return;
-	if (!*list)
-	{
-		*list = new;
-		return;
-	}
-	current = *list;
-	while (current->next)
-		current = current->next;
-	current->next = new;
-}
-
-void	token_type(t_token *new_token, char *s, int i)
+static void	token_type(t_token *new_token, char *s, int i)
 {
 	if (s[i] == '|')
 		new_token->type = TOKEN_PIPE;
@@ -31,84 +26,85 @@ void	token_type(t_token *new_token, char *s, int i)
 	else if (s[i] == '>')
 		new_token->type = REDIR_OUT;
 	else
-		new_token->type = TOKEN_WORD; // check type & ?
+		new_token->type = TOKEN_WORD;
 }
 
-t_token	*create_token(char *s, char quote, int start, int len)
+static t_token	*create_token(char *s, char quote, int start, int len)
 {
 	t_token	*new_token;
-
-	printf("create : start : %d, len : %d\n", start, len);
 
 	new_token = malloc(sizeof(t_token));
 	if (!new_token)
 		return (NULL);
 
-	new_token->value = ft_substr(s, start, len);   // adresse de la chaine donc on aura tout a partir de cette adresse ?         // NON CAR JE VAIS JUSQU'A LEN.
-	if (quote == '\'')    // probleme ? il faut un len d'arret, et pas toute la chaine                  // exactement.
+	new_token->value = ft_substr(s, start, len);
+	if (!new_token->value)
+	{
+		free(new_token);
+		return (NULL);
+	}
+	if (quote == '\'')
 		new_token->quoted = 1;
 	else if (quote == '"')
 		new_token->quoted = 2;
 	else
 		new_token->quoted = 0;
-
-	// printf("%s\n", token->value);
+ 
 	new_token->next = NULL;
 	token_type(new_token, s, start);
-	return (new_token); ////
+	return (new_token);
 }
-// TODO : recuperer la longuer, le debut du mot et sa fin (pour remplir structure value)
 
-
-// int	token(t_token **list, char *s, int i)
-// {
-// 	int	len;
-
-// 	printf("type\n");
-// 	if (s[i] == s[i + 1] && s[i + 1] != '|')
-// 		len = i + 2;
-// 	else
-// 		len = i + 1; // why i++ was infinit loop ? //wait i can do i++ when i do something = something !?
-
-// 	add_back(list, create_token(s, 0, i, len - i)); // can put any character to idicate 'WORD', or just remove parameter quote
-// 	// printf("\n======== %d ========\n", REDIR_APPEND);
-// 	return (len);
-// }
-
-int	token_word(t_token **list, char *line, int i)
+static int	token(t_token **list, char *s, int *i)
 {
+	t_token	*new;
+	int		len;
+
+	if (s[*i] == s[*i + 1] && s[*i + 1] != '|')
+		len = *i + 2;
+	else
+		len = *i + 1;
+
+	new = create_token(s, 0, *i, len - *i);
+	if (!new)
+		return (0);
+	add_back(list, new);
+	*i = len;
+	return (1);
+}
+
+static int	token_word(t_token **list, char *line, int *i)
+{
+	t_token	*new;
 	int		start;
 	char	quote;
 
-	start = i;
+	start = *i;
 	quote = 0;
-	while (line[i] != ' ' && line[i] && !sym(line[i]))
+	while (line[*i] != ' ' && line[*i] && !sym(line[*i]))
 	{
-		// printf("----");
-		if (line[i] == '\'' || line[i] == '"')
+		if (line[*i] == '\'' || line[*i] == '"')
 		{
-			quote = line[i];
-			i++;
-			while (line[i] != quote && line[i])
-				i++;
-			i++;
+			quote = line[*i];
+			if (!find_end_quote(line, i))
+				return (0);
 		}
 		else
-			i++;
+			(*i)++;
 	}
-	printf("word : start: %d - len: %d\n", start, i);
-	add_back(list, create_token(line, quote, start, i - start));
-	quote = 0;
-	return (i);
+	new = create_token(line, quote, start, *i - start);
+	if (!new)
+		return (0);
+	add_back(list, new);
+	return (1);
 }
 
 t_token	*lexer(char *line)
 {
 	t_token	*head;
 	int		i;
-	int		len;
 
-	head = NULL; // no need?
+	head = NULL;
 	i = 0;
 	while (line[i])
 	{
@@ -118,16 +114,14 @@ t_token	*lexer(char *line)
 			break ;
 		if (sym(line[i]) && line[i] != ' ')
 		{
-			if (line[i] == line[i + 1] && line[i + 1] != '|')
-				len = i + 2;
-			else
-				len = i + 1;
-			// printf("====%c, %c====", line[i], line[i+1]);
-			add_back(&head, create_token(line, 0, i, len - i)); // can put any character to idicate 'WORD', or just remove parameter quote
-			i = len;
+			if (!token(&head, line, &i))
+				return (free_token(&head), NULL);        // MESSAGE ERREUR
 		}
-		else
-			i = token_word(&head, line, i);
+		else 
+		{
+			if (!token_word(&head, line, &i))
+				return (free_token(&head), NULL);        // MESSAGE ERREUR
+		}
 	}
 	return (head);
 }
@@ -171,8 +165,7 @@ t_token	*lexer(char *line)
 // }
 
 
-// to compile separately
-//cc lexer.c ../../../libft/libft.a  ../parsing_utils.c -lreadline
+//cc lexer.c ../../../libft/libft.a  ../parsing_utils.c lexer_utils.c -lreadline
 
 // TEST : //
 // echo"hi" -> 1
@@ -183,3 +176,17 @@ t_token	*lexer(char *line)
 // echo "hi -> ne devrait pas marcher
 //echo hello echo "hello" 'world' | OR << OR >> OR >
 //echo "nevermind" || grep "never mind"
+// echo 'sd' d's -> ca doit marcher ?
+
+// TODO : \ (backslash) or ; (semicolon)
+// TODO : || -> cree une erreur
+
+
+// > eww -> marche
+// | dhfj -> NO
+// >> eww -> marche
+// << df -> marche
+// < -> NO
+// echo 'sd' d's -> NO
+// "      " -> OK
+// echo || hello -> OK
