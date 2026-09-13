@@ -1,13 +1,11 @@
 #include "minishell.h"
 
-
-
-int read_heredoc(t_redir *redir)
+int	read_heredoc(t_redir *redir)
 {
-	char *line;
-	int fd[2];
+	char	*line;
+	int		fd[2];
 
-	if (pipe(fd) ==  -1)
+	if (pipe(fd) == -1)
 		return (perror("minishell: heredoc pipe"), 1);
 	while (1)
 	{
@@ -23,12 +21,12 @@ int read_heredoc(t_redir *redir)
 			err_warn(redir->file, ": warning: here-document "
 				"delimited by end-of-file (wanted `",
 				"')");
-			break;
+			break ;
 		}
 		if (ft_strcmp(line, redir->file) == 0)
 		{
 			free(line);
-			break;
+			break ;
 		}
 		ft_putendl_fd(line, fd[1]);
 		free(line);
@@ -38,20 +36,20 @@ int read_heredoc(t_redir *redir)
 	return (0);
 }
 
-int heredoc(t_cmd *cmd)
+int	heredoc(t_cmd *cmd)
 {
+	t_redir	*curr_redir;
+
 	while (cmd)
 	{
-		t_redir *curr_redir;
-
 		curr_redir = cmd->redirs;
 		while (curr_redir)
 		{
 			if (curr_redir->type == REDIR_HEREDOC)
 			{
 				if (!curr_redir->file)
-					return(err_warn("syntax error near "
-						"unexpected token ", curr_redir->file, ""), 1);
+					return (err_warn("syntax error near "
+							"unexpected token ", curr_redir->file, ""), 1);
 				if (read_heredoc(curr_redir) != 0)
 					return (1);
 			}
@@ -59,5 +57,5 @@ int heredoc(t_cmd *cmd)
 		}
 		cmd = cmd->next;
 	}
-	return 0;
+	return (0);
 }

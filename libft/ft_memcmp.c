@@ -29,7 +29,7 @@ int	ft_memcmp(const void *ptr1, const void *ptr2, size_t size)
 	p1_b = (const unsigned char *)ptr1;
 	p2_b = (const unsigned char *)ptr2;
 	if (!(i = count(token)))
-		return 1;
+		return (1);
 	while (i < size)
 	{
 		if (p1_b[i] != p2_b[i])

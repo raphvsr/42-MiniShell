@@ -1,10 +1,8 @@
-// TODO
-
 #include "minishell.h"
 
-volatile sig_atomic_t g_signal = 0;
+volatile sig_atomic_t	g_signal = 0;
 
-void sigint_handler(int signal)
+void	sigint_handler(int signal)
 {
 	(void)signal;
 	g_signal = SIGINT;
@@ -16,15 +14,14 @@ void sigint_handler(int signal)
 
 void	init_signals(void)
 {
-	signal(SIGINT, sigint_handler);  // for CTRL + C
-	signal(SIGQUIT, SIG_IGN);  // for CTRL + \ (SIGN_IGN = signal ignore)
+	signal(SIGINT, sigint_handler);
+	signal(SIGQUIT, SIG_IGN);
 }
-
 
 void	init_csignals(void)
 {
-    signal(SIGINT, SIG_DFL); // for child process we put back normal signals
-    signal(SIGQUIT, SIG_DFL);
+	signal(SIGINT, SIG_DFL);
+	signal(SIGQUIT, SIG_DFL);
 }
 
 void	init_signals_exec(void)

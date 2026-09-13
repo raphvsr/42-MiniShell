@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   lexer.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kheda <kheda@student.42.fr>                +#+  +:+       +#+        */
+/*   By: rvasseur <raphael.vasseur@proton.me>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/09/11 02:46:26 by kheda             #+#    #+#             */
-/*   Updated: 2026/09/11 03:06:14 by kheda            ###   ########.fr       */
+/*   Updated: 2026/09/12 16:43:12 by rvasseur         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,6 @@ static t_token	*create_token(char *s, char quote, int start, int len)
 	new_token = malloc(sizeof(t_token));
 	if (!new_token)
 		return (NULL);
-
 	new_token->value = ft_substr(s, start, len);
 	if (!new_token->value)
 	{
@@ -49,7 +48,6 @@ static t_token	*create_token(char *s, char quote, int start, int len)
 		new_token->quoted = 2;
 	else
 		new_token->quoted = 0;
- 
 	new_token->next = NULL;
 	token_type(new_token, s, start);
 	return (new_token);
@@ -64,7 +62,6 @@ static int	token(t_token **list, char *s, int *i)
 		len = *i + 2;
 	else
 		len = *i + 1;
-
 	new = create_token(s, 0, *i, len - *i);
 	if (!new)
 		return (0);
@@ -115,78 +112,13 @@ t_token	*lexer(char *line)
 		if (sym(line[i]) && line[i] != ' ')
 		{
 			if (!token(&head, line, &i))
-				return (free_token(&head), NULL);        // MESSAGE ERREUR
+				return (free_token(&head), NULL);
 		}
-		else 
+		else
 		{
 			if (!token_word(&head, line, &i))
-				return (free_token(&head), NULL);        // MESSAGE ERREUR
+				return (free_token(&head), NULL);
 		}
 	}
 	return (head);
 }
-
-// int	main()
-// {
-// 	char	*line;
-// 	t_token	*token;
-
-// 	token = NULL;
-
-// 	while (1)
-// 	{
-// 		line = readline("SHELL> ");
-// 		if (!line)
-// 		{
-// 			printf("exit\n");
-// 			break;
-// 		}
-// 		if (*line) // no need ?
-// 		{
-// 			add_history(line);
-// 			token = lexer(line);
-// 			if (!token)
-// 				printf("NO\n");
-// 			else
-// 				printf("OK\n");
-
-// 		}
-// 		free(line);
-// 	}
-
-// 	t_token *tmp = token;
-// 	while (tmp)
-// 	{
-// 		printf("---");
-// 		printf("%s, type : %d , quoted : %d\n", tmp->value, tmp->type, tmp->quoted);
-// 		tmp = tmp->next;
-// 	}
-// 	return 0;
-// }
-
-
-//cc lexer.c ../../../libft/libft.a  ../parsing_utils.c lexer_utils.c -lreadline
-
-// TEST : //
-// echo"hi" -> 1
-// "echo \"hi\" | grep" -> 1
-// "echo\"hi\"" -> 1
-// echo abc"def"ghi -> 2
-// echo "hi" | grep -> 4
-// echo "hi -> ne devrait pas marcher
-//echo hello echo "hello" 'world' | OR << OR >> OR >
-//echo "nevermind" || grep "never mind"
-// echo 'sd' d's -> ca doit marcher ?
-
-// TODO : \ (backslash) or ; (semicolon)
-// TODO : || -> cree une erreur
-
-
-// > eww -> marche
-// | dhfj -> NO
-// >> eww -> marche
-// << df -> marche
-// < -> NO
-// echo 'sd' d's -> NO
-// "      " -> OK
-// echo || hello -> OK

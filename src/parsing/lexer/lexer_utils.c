@@ -51,7 +51,7 @@ int	find_end_quote(char *line, int *i)
 	while (line[*i] != quote && line[*i])
 		(*i)++;
 	if (!line[*i])
-		return (0); /*ERREUR MESSAGE (unclosed quote) */
+		return (0);
 	(*i)++;
 	return (1);
 }

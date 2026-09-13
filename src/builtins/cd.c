@@ -1,7 +1,3 @@
-
-
-// cd with only a relative or absolute path
-
 #include "minishell.h"
 
 static void	up_pwd(t_env **env_list, char *old_pwd)

@@ -1,13 +1,12 @@
-
 #include "minishell.h"
 
-int exec_one_builtin(t_cmd *cmd, t_env **env_list, int status)
+int	exec_one_builtin(t_cmd *cmd, t_env **env_list, int status)
 {
-	int in;
-	int out;
+	int	in;
+	int	out;
 
 	in = dup(0);
-	out = dup(1); // we could duplicate only if redir but almost no difference
+	out = dup(1);
 	if (exec_redirs(cmd->redirs) != 0)
 		status = 1;
 	else
@@ -16,10 +15,10 @@ int exec_one_builtin(t_cmd *cmd, t_env **env_list, int status)
 	dup2(out, 1);
 	close(in);
 	close(out);
-	return status;
+	return (status);
 }
 
-static void connect_cpipe(t_cmd *cmd, t_env **env_list, int prev_fd,
+static void	connect_cpipe(t_cmd *cmd, t_env **env_list, int prev_fd,
 	int *pipe_fd, int status)
 {
 	if (prev_fd != -1)
@@ -35,17 +34,17 @@ static void connect_cpipe(t_cmd *cmd, t_env **env_list, int prev_fd,
 	}
 	init_csignals();
 	if (exec_redirs(cmd->redirs) != 0)
-    	exit(1);
+		exit(1);
 	if (!cmd->argv || !cmd->argv[0])
-    	exit(0);
+		exit(0);
 	if (is_buildin(cmd->argv[0]))
 		exit(execute_builtin(cmd, env_list, status));
 	cprocess(f_cmdpath(cmd->argv[0], *env_list), cmd, env_to_array(*env_list));
 }
 
-int exec_pipe(t_cmd *cmd, t_env **env_list, int status)
+int	exec_pipe(t_cmd *cmd, t_env **env_list, int status)
 {
-	int		pipe_fd[2]; // for fd[0] & fd[1]
+	int		pipe_fd[2];
 	int		prev_fd;
 	pid_t	pid;
 
@@ -53,8 +52,8 @@ int exec_pipe(t_cmd *cmd, t_env **env_list, int status)
 	init_signals_exec();
 	while (cmd)
 	{
-		if (cmd->next && pipe(pipe_fd) == -1)	// we put the pipe between 0 and 1
-			return (1);							// only if its not last cmd
+		if (cmd->next && pipe(pipe_fd) == -1)
+			return (1);
 		pid = fork();
 		if (pid == 0)
 			connect_cpipe(cmd, env_list, prev_fd, pipe_fd, status);

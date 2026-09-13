@@ -1,12 +1,10 @@
-
 #include "minishell.h"
 
-
-static int input_handler(t_redir *redir)
+static int	input_handler(t_redir *redir)
 {
-	int fd;
+	int	fd;
 
-	if (redir->type == REDIR_IN) // for <
+	if (redir->type == REDIR_IN)
 	{
 		fd = open(redir->file, O_RDONLY);
 		if (fd < 0)
@@ -17,7 +15,7 @@ static int input_handler(t_redir *redir)
 		dup2(fd, STDIN_FILENO);
 		close(fd);
 	}
-	if (redir->type == REDIR_HEREDOC) // for <<
+	if (redir->type == REDIR_HEREDOC)
 	{
 		if (redir->heredoc_fd < 0)
 		{
@@ -30,11 +28,11 @@ static int input_handler(t_redir *redir)
 	return (0);
 }
 
-static int output_handler(t_redir *redir)
+static int	output_handler(t_redir *redir)
 {
-	int fd;
+	int	fd;
 
-	if (redir->type == REDIR_OUT) // for >
+	if (redir->type == REDIR_OUT)
 	{
 		fd = open(redir->file, O_WRONLY | O_CREAT | O_TRUNC, 0644);
 		if (fd < 0)
@@ -45,9 +43,9 @@ static int output_handler(t_redir *redir)
 		dup2(fd, STDOUT_FILENO);
 		close(fd);
 	}
-	if (redir->type == REDIR_APPEND) // for >>
+	if (redir->type == REDIR_APPEND)
 	{
-		fd = open(redir->file, O_WRONLY | O_CREAT | O_APPEND, 0644); // 0644 code permission
+		fd = open(redir->file, O_WRONLY | O_CREAT | O_APPEND, 0644);
 		if (fd < 0)
 		{
 			perror(redir->file);
@@ -59,10 +57,9 @@ static int output_handler(t_redir *redir)
 	return (0);
 }
 
-
-int exec_redirs(t_redir *redirs)
+int	exec_redirs(t_redir *redirs)
 {
-	int status;
+	int	status;
 
 	status = 0;
 	if (!redirs)

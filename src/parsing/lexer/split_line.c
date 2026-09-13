@@ -26,34 +26,12 @@ static int	free_all(char **tab, int len)
 	return (0);
 }
 
-// void	create_token(char *s, char quote, int type) // le type WORD etc 
-// {
-// 	t_token *token;
-// 	// int	i;
-// 
-// 	token = malloc(sizeof(t_token));
-// 	if (!token)
-// 		return;
-// 	// i = 0;
-// 	// while (s[i])
-// 	token->value = s; // adresse de la chaine donc on aura tout a partir de cette adresse ?
-// 	token->type = type;   // probleme ? il faut un len d'arret, et pas toute la chaine
-// 	if (quote == '\'')
-// 		token->quoted = 1;
-// 	else if (quote == '"')
-// 		token->quoted = 2;
-// 	else
-// 		token->quoted = 0;
-// 										// token->quoted = quoted_type_number; ??
-// 	// token = token->next; // ? here
-// }
-
 static int	count_words(char const *s, char c)
 {
-	int	i;
-	char quote;
-	int	cpt;
-	
+	int		i;
+	char	quote;
+	int		cpt;
+
 	i = 0;
 	cpt = 0;
 	while (s[i])
@@ -61,7 +39,7 @@ static int	count_words(char const *s, char c)
 		while (s[i] == c && s[i])
 			i++;
 		if (s[i] == '\0')
-			break;
+			break ;
 		else if (s[i] == '|' || s[i] == '<' || s[i] == '>')
 		{
 			if (s[i] == s[i + 1] && s[i + 1] != '|')
@@ -80,14 +58,12 @@ static int	count_words(char const *s, char c)
 					while (s[i] != quote && s[i] != '\0')
 						i++;
 					if (s[i] == '\0')
-						return (5); // 0
-					// create_token(&s, quote, 1); // 1 -> type WORD en vrai
+						return (5);
 					quote = 0;
 					i++;
 				}
 				else
 					i++;
-				// create_token(&s, 'a', 1); // 1 -> type WORD en vrai, a -> simplier, but can do any alphabetic character
 			}
 		}
 		cpt++;
@@ -128,21 +104,21 @@ static int	fill(char **tab, char const *s, char c)
 	{
 		while (s[i] && s[i] == c)
 			i++;
-		if ((s[i] == '\'' || s[i] == '"')) //|| (s[i + 1] == '\'' || s[i + 1] == '"')
+		if ((s[i] == '\'' || s[i] == '"'))
 			flag = 1;
 		start = i;
 		while (s[i])
 		{
 			if ((s[i] == '\'' || s[i] == '"'))
 				flag = 1;
-			if (flag == 1 && (s[i + 1] == '\'' || s[i + 1] == '"')) // && s[i + 1] == c
+			if (flag == 1 && (s[i + 1] == '\'' || s[i + 1] == '"'))
 			{
 				flag = 0;
 				i = i + 2;
-				break;
+				break ;
 			}
-			else if (s[i] == c && flag == 0) // && !sym(s[i])
-				break;
+			else if (s[i] == c && flag == 0)
+				break ;
 			i++;
 		}
 		if (i > start)
@@ -172,13 +148,3 @@ char	**split_line(char const *s, char c)
 		return (NULL);
 	return (tab);
 }
-
-// int main()
-// {
-//     char **tab = split_line("  no 'Un po' em pr", ' ');
-//     for (int i = 0; i < 6; i++)
-//     {
-//         printf("%s\n", tab[i]);
-//     }
-// 	return (0);
-// }

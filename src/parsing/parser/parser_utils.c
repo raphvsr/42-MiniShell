@@ -18,8 +18,7 @@ void	free_argv(char **argv)
 	int	i;
 
 	if (!argv)
-		return;
-
+		return ;
 	i = 0;
 	while (argv[i])
 	{
@@ -58,14 +57,14 @@ void	free_cmd(t_cmd **cmd)
 
 void	add_back_cmd(t_cmd **list, t_cmd *new)
 {
-	t_cmd *current;
+	t_cmd	*current;
 
 	if (!list || !new)
-		return;
+		return ;
 	if (!*list)
 	{
 		*list = new;
-		return;
+		return ;
 	}
 	current = *list;
 	while (current->next)
@@ -75,14 +74,14 @@ void	add_back_cmd(t_cmd **list, t_cmd *new)
 
 void	add_back_redir(t_redir **list, t_redir *new)
 {
-	t_redir *current;
+	t_redir	*current;
 
 	if (!list || !new)
-		return;
+		return ;
 	if (!*list)
 	{
 		*list = new;
-		return;
+		return ;
 	}
 	current = *list;
 	while (current->next)

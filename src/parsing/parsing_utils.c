@@ -66,7 +66,7 @@ char	*clean_token(t_token *token)
 	char	*new;
 
 	i = 0;
-	start = 0; // no need ?
+	start = 0;
 	line = ft_strdup(token->value);
 	while (line[i])
 	{
@@ -76,7 +76,7 @@ char	*clean_token(t_token *token)
 			end = (int)(ft_strchr(&line[start + 1], line[start]) - line);
 			new = new_line(line, start, end);
 			if (!new)
-				return (free(line), NULL); // FREE LINE HERE ???? MESSAGE ????
+				return (free(line), NULL);
 			free(line);
 			line = new;
 			i = end - 2;

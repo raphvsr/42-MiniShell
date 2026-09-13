@@ -14,16 +14,16 @@
 
 int	main(int ac, char **av, char **envp)
 {
-	(void)ac;
-	(void)av;
-	t_env 	*env;
+	t_env	*env;
 	t_token	*tokens;
 	t_cmd	*cmd;
 	char	*line;
-	int		status = 0;
+	int		status;
 
+	status = 0;
+	(void)ac;
+	(void)av;
 	env = init_env(envp);
-
 	init_signals();
 	tokens = NULL;
 	while (1)
@@ -32,7 +32,7 @@ int	main(int ac, char **av, char **envp)
 		if (!line)
 		{
 			ft_putendl_fd("exit", 2);
-			break;
+			break ;
 		}
 		if (*line)
 		{

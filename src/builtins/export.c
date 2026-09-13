@@ -1,22 +1,31 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   export.c                                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: rvasseur <raphael.vasseur@proton.me>       +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/09/12 18:22:12 by rvasseur          #+#    #+#             */
+/*   Updated: 2026/09/12 18:22:20 by rvasseur         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
 #include "minishell.h"
 
-// TODO separate 25 lines functions -> norminette
-// export need to validate the name (e.g USER=raph -> valid. 2USER=raph -> invalid)
-static int validate(char *arg)
+static int	validate(char *arg)
 {
-    int i;
+	int	i;
 
-    i = 1;
-	if ((!arg || !ft_isalpha(arg[0])) && arg[0] != '_') // first letter
+	i = 1;
+	if ((!arg || !ft_isalpha(arg[0])) && arg[0] != '_')
 		return (0);
-    while (arg[i] && arg[i] != '=') // for key
-    {
-        if (!ft_isalnum(arg[i]) && arg[i] != '_')
-            return (0);
-        i++;
-    }
-    return 1;
+	while (arg[i] && arg[i] != '=')
+	{
+		if (!ft_isalnum(arg[i]) && arg[i] != '_')
+			return (0);
+		i++;
+	}
+	return (1);
 }
 
 static void	sort(t_env **tab, int env_len)
@@ -24,6 +33,7 @@ static void	sort(t_env **tab, int env_len)
 	int		i;
 	int		j;
 	t_env	*temp;
+
 	i = 0;
 	while (i < env_len)
 	{
@@ -45,6 +55,7 @@ static void	sort(t_env **tab, int env_len)
 static void	print(t_env **tab, int env_len)
 {
 	int	i;
+
 	i = 0;
 	while (i < env_len)
 	{
@@ -70,6 +81,7 @@ void	show_env(t_env *env_list)
 	int		i;
 	int		env_len;
 	t_env	**tab;
+
 	env_len = count_env(env_list);
 	if (env_len == 0)
 		return ;
@@ -113,6 +125,3 @@ int	b_export(char **args, t_env **env_list)
 	}
 	return (cexport != 0);
 }
-
-
-
