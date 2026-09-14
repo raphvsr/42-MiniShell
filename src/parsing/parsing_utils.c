@@ -32,8 +32,8 @@ int	count_word_token(t_token *tmp)
 		}
 		else
 		{
-			if (!tmp->next || tmp->next->type != TOKEN_WORD) //redir at the end           ERROR MESSAGE
-				break;
+			if (!tmp->next || tmp->next->type != TOKEN_WORD)
+				break ;
 			tmp = tmp->next->next;
 		}
 	}

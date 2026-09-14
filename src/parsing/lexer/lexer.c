@@ -84,7 +84,7 @@ static int	token_word(t_token **list, char *line, int *i)
 		{
 			quote = line[*i];
 			if (!find_end_quote(line, i))
-				return (quote_error());  /*ERREUR MESSAGE (unclosed quote) */
+				return (quote_error());
 		}
 		else
 			(*i)++;
@@ -122,68 +122,3 @@ t_token	*lexer(char *line)
 	}
 	return (head);
 }
-
-int	main()
-{
-	char	*line;
-	t_token	*token;
-
-	token = NULL;
-
-	while (1)
-	{
-		line = readline("SHELL> ");
-		if (!line)
-		{
-			printf("exit\n");
-			break;
-		}
-		if (*line) // no need ?
-		{
-			add_history(line);
-			token = lexer(line);
-			if (!token)
-				printf("NO\n");
-			else
-				printf("OK\n");
-
-		}
-		free(line);
-	}
-
-	t_token *tmp = token;
-	while (tmp)
-	{
-		printf("---");
-		printf("%s, type : %d , quoted : %d\n", tmp->value, tmp->type, tmp->quoted);
-		tmp = tmp->next;
-	}
-	return 0;
-}
-
-
-//cc lexer.c ../../../libft/libft.a  ../parsing_utils.c lexer_utils.c -lreadline
-
-// TEST : //
-// echo"hi" -> 1
-// "echo \"hi\" | grep" -> 1
-// "echo\"hi\"" -> 1
-// echo abc"def"ghi -> 2
-// echo "hi" | grep -> 4
-// echo "hi -> ne devrait pas marcher
-//echo hello echo "hello" 'world' | OR << OR >> OR >
-//echo "nevermind" || grep "never mind"
-// echo 'sd' d's -> ca doit marcher ?
-
-// TODO : \ (backslash) or ; (semicolon)
-// TODO : || -> cree une erreur
-
-
-// > eww -> marche
-// | dhfj -> NO
-// >> eww -> marche
-// << df -> marche
-// < -> NO
-// echo 'sd' d's -> NO
-// "      " -> OK
-// echo || hello -> OK

@@ -6,27 +6,33 @@
 /*   By: rvasseur <raphael.vasseur@proton.me>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/09/12 23:59:15 by rvasseur          #+#    #+#             */
-/*   Updated: 2026/09/12 23:59:17 by rvasseur         ###   ########.fr       */
+/*   Updated: 2026/09/14 14:14:20 by rvasseur         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
+static int	n(char *arg)
+{
+	int	j;
+
+	if (!arg || arg[0] != '-' || arg[1] != 'n')
+		return (0);
+	j = 1;
+	while (arg[j] == 'n')
+		j++;
+	return (arg[j] == '\0');
+}
+
 int	b_echo(char **args)
 {
 	int	i;
 	int	n_flag;
-	int	j;
 
 	i = 1;
 	n_flag = 0;
-	while (args[i] && args[i][0] == '-' && args[i][1] == 'n')
+	while (args[i] && n(args[i]))
 	{
-		j = 1;
-		while (args[i][j] == 'n')
-			j++;
-		if (args[i][j] != '\0')
-			break ;
 		n_flag = 1;
 		i++;
 	}

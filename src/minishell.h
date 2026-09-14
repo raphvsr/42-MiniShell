@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   minishell.h                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: rvasseur <raphael.vasseur@proton.me>       +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/08/06 19:22:28 by p0ubelle          #+#    #+#             */
+/*   Updated: 2026/09/14 16:21:09 by rvasseur         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #ifndef MINISHELL_H
 # define MINISHELL_H
 
@@ -77,6 +89,7 @@ int		b_exit(char **args, t_env **env_list, int last_status);
 int		b_env(t_env **env_list);
 int		b_unset(char **args, t_env **env_list);
 int		b_export(char **args, t_env **env_list);
+int		valid_env_name(char *arg);
 
 void	init_signals(void);
 extern volatile sig_atomic_t	g_signal;
@@ -89,8 +102,7 @@ int		sym(char c);
 int		find_end_quote(char *line, int *i);
 t_token	*lexer(char *line);
 
-// parser
-int		parsing(t_token **tokens, t_cmd **head, t_env *env);
+int		parsing(t_token **tokens, t_cmd **head, t_env *env, int exit_status);
 void	free_argv(char **argv);
 void	free_redirs(t_redir *redir);
 void	free_cmd(t_cmd **cmd);
@@ -99,11 +111,10 @@ void	add_back_redir(t_redir **list, t_redir *new);
 int		count_word_token(t_token *tmp);
 char	*clean_token(t_token *token);
 char	*new_line(char *line, int start, int end);
+int		syntax_error(char *token);
 
-// expander
 char	*expander(char *s, int quoted, t_env *env, int exit_status);
 
-// error
 void	free_array(char **array);
 void	err_exit(char *cmd, char *msg, int code);
 void	err_warn(char *msg1, char *cmd, char *msg2);

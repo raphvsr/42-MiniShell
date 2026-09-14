@@ -39,14 +39,32 @@ int	count_env_wvalue(t_env *env_list)
 	return (count);
 }
 
+static char	*format_env_kv(t_env *env)
+{
+	char	*str;
+
+	str = malloc(ft_strlen(env->key) + ft_strlen(env->value) + 2);
+	if (!str)
+		return (NULL);
+	ft_strcpy(str, env->key);
+	ft_strcat(str, "=");
+	ft_strcat(str, env->value);
+	return (str);
+}
+
+static void	free_partial(char **array, int i)
+{
+	while (i > 0)
+		free(array[--i]);
+	free(array);
+}
+
 char	**env_to_array(t_env *env_list)
 {
 	char	**array;
 	int		i;
-	int		env_len;
 
-	env_len = count_env_wvalue(env_list);
-	array = malloc(sizeof(char *) * (env_len + 1));
+	array = malloc(sizeof(char *) * (count_env_wvalue(env_list) + 1));
 	if (!array)
 		return (NULL);
 	i = 0;
@@ -54,18 +72,12 @@ char	**env_to_array(t_env *env_list)
 	{
 		if (env_list->value)
 		{
-			array[i] = malloc(ft_strlen(env_list->key)
-				+ ft_strlen(env_list->value) + 2);
+			array[i] = format_env_kv(env_list);
 			if (!array[i])
 			{
-				while (i > 0)
-					free(array[--i]);
-				free(array);
+				free_partial(array, i);
 				return (NULL);
 			}
-			ft_strcpy(array[i], env_list->key);
-			ft_strcat(array[i], "=");
-			ft_strcat(array[i], env_list->value);
 			i++;
 		}
 		env_list = env_list->next;

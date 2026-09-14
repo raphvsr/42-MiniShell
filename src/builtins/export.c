@@ -6,13 +6,13 @@
 /*   By: rvasseur <raphael.vasseur@proton.me>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/09/12 18:22:12 by rvasseur          #+#    #+#             */
-/*   Updated: 2026/09/12 18:22:20 by rvasseur         ###   ########.fr       */
+/*   Updated: 2026/09/14 15:48:00 by rvasseur         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-static int	validate(char *arg)
+int	valid_env_name(char *arg)
 {
 	int	i;
 
@@ -112,7 +112,7 @@ int	b_export(char **args, t_env **env_list)
 	cexport = 0;
 	while (args[++i])
 	{
-		if (!validate(args[i]) && ++cexport)
+		if (!valid_env_name(args[i]) && ++cexport)
 			err_warn("export: `", args[i], "': not a valid identifier");
 		else
 		{

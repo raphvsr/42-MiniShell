@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: kheda <kheda@student.42.fr>                +#+  +:+       +#+         #
+#    By: rvasseur <raphael.vasseur@proton.me>       +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2026/05/30 12:00:00 by p0ubelle          #+#    #+#              #
-#    Updated: 2026/09/12 15:58:58 by kheda            ###   ########.fr        #
+#    Updated: 2026/09/14 17:13:20 by rvasseur         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -27,15 +27,15 @@ SRCS        =	src/main.c \
 				src/exec/executor.c src/exec/exec_utils.c src/exec/redir.c src/exec/heredoc.c\
 				src/exec/executor2.c \
 				src/parsing/parsing_utils.c \
-				src/parsing/print_errors.c \
-				src/parsing/lexer/split_line.c \
+				src/parsing/parsing_errors.c \
+				src/parsing/expander/expander.c \
 				src/parsing/lexer/lexer.c \
 				src/parsing/lexer/lexer_utils.c \
 				src/parsing/parser/parser_utils.c \
 				src/parsing/parser/parser.c \
 				src/env/env_utils3.c \
  				src/signals/signals.c
-				
+
 
 OBJS        = $(SRCS:.c=.o)
 

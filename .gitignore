@@ -4,3 +4,4 @@ a.out
 .DS_Store
 .clangd
 compile_commands.json
+minishell

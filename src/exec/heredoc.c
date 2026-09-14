@@ -1,12 +1,38 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   heredoc.c                                          :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: rvasseur <raphael.vasseur@proton.me>       +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/09/14 13:54:28 by rvasseur          #+#    #+#             */
+/*   Updated: 2026/09/14 15:26:49 by rvasseur         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
-int	read_heredoc(t_redir *redir)
+static int	hcheck(char *line, t_redir *redir)
+{
+	if (line == NULL)
+	{
+		err_warn(redir->file, ": warning: here-document "
+			"delimited by end-of-file (wanted `",
+			"')");
+		return (1);
+	}
+	if (ft_strcmp(line, redir->file) == 0)
+	{
+		free(line);
+		return (1);
+	}
+	return (0);
+}
+
+static int	hloop(t_redir *redir, int fd[2])
 {
 	char	*line;
-	int		fd[2];
 
-	if (pipe(fd) == -1)
-		return (perror("minishell: heredoc pipe"), 1);
 	while (1)
 	{
 		line = readline("> ");
@@ -16,21 +42,22 @@ int	read_heredoc(t_redir *redir)
 			close(fd[1]);
 			return (1);
 		}
-		if (line == NULL)
-		{
-			err_warn(redir->file, ": warning: here-document "
-				"delimited by end-of-file (wanted `",
-				"')");
+		if (hcheck(line, redir))
 			break ;
-		}
-		if (ft_strcmp(line, redir->file) == 0)
-		{
-			free(line);
-			break ;
-		}
 		ft_putendl_fd(line, fd[1]);
 		free(line);
 	}
+	return (0);
+}
+
+int	read_heredoc(t_redir *redir)
+{
+	int	fd[2];
+
+	if (pipe(fd) == -1)
+		return (perror("minishell: heredoc pipe"), 1);
+	if (hloop(redir, fd) != 0)
+		return (1);
 	close(fd[1]);
 	redir->heredoc_fd = fd[0];
 	return (0);

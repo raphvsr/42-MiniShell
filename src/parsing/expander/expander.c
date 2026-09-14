@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expander.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kheda <kheda@student.42.fr>                +#+  +:+       +#+        */
+/*   By: rvasseur <raphael.vasseur@proton.me>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/09/12 16:28:02 by kheda             #+#    #+#             */
-/*   Updated: 2026/09/14 15:32:29 by kheda            ###   ########.fr       */
+/*   Updated: 2026/09/14 16:13:07 by rvasseur         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,17 +34,15 @@ char	*to_expand(char *s, t_env *env, int *i)
 	while (s[*i] && (ft_isalnum(s[*i]) || s[*i] == '_'))
 		(*i)++;
 	key = ft_substr(s, start, *i - start);
-	if (!key)
-		return (NULL);
-	if (!validate(key))
+	if (!valid_env_name(key))
 	{
 		free(key);
 		return (ft_strdup(""));
 	}
 	key_env = env_find(env, key);
 	free(key);
-	if (!key_env)
-		return (strdup(""));
+	if (!key_env || !key_env->value)
+		return (ft_strdup(""));
 	return (ft_strdup(key_env->value));
 }
 
@@ -52,29 +50,30 @@ char	*find_expand(char *s, t_env *env, int *i, int exit_status)
 {
 	char	*new;
 
-	(*i)++; // ON SAUTE LE $
+	(*i)++;
 	if (s[*i] == '?')
 	{
 		(*i)++;
-		new = ft_itoa(exit_status);
-		return (new);
+		return (ft_itoa(exit_status));
 	}
 	else if (ft_isdigit(s[*i]))
 	{
 		(*i)++;
 		return (ft_strdup(""));
 	}
+	if (!s[*i] || (!ft_isalpha(s[*i]) && s[*i] != '_'))
+		return (ft_strdup("$"));
 	new = to_expand(s, env, i);
 	return (new);
 }
 
-char	add_str(char *str, char *new)
+static char	*add_str(char *str, char *new)
 {
 	char	*new_str;
 
+	new_str = ft_strjoin(str, new);
 	free(str);
 	free(new);
-	new_str = ft_strjoin(str, new);
 	return (new_str);
 }
 
@@ -104,18 +103,3 @@ char	*expander(char *s, int quoted, t_env *env, int exit_status)
 	}
 	return (str);
 }
-
-// TEST
-// ➜  42-MiniShell git:(main) ✗ echo abc$USERde
-// abc
-// ➜  42-MiniShell git:(main) ✗ echo abc$USER- 
-// abc-
-// ➜  42-MiniShell git:(main) ✗ echo abc$USER
-
-
-// echo abc$1345098723456789056789de
-// zsh: number truncated after 20 digits: 1345098723456789056789de
-// abcde
-
-//echo abc$1345098723456789056789de  
-//abc345098723456789056789de  //ca remplace le $1 mais garde le reste
