@@ -6,7 +6,7 @@
 /*   By: kheda <kheda@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/09/11 02:46:04 by kheda             #+#    #+#             */
-/*   Updated: 2026/09/14 07:07:30 by kheda            ###   ########.fr       */
+/*   Updated: 2026/09/14 16:56:13 by kheda            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,12 +40,17 @@ int	count_word_token(t_token *tmp)
 	return (cpt);
 }
 
-char	*new_line(char *line, int start, int end)
+char	*new_line(char *line, int start, int *end)
 {
 	char	*s;
+	char	*ptr;
 	int		i;
 	int		j;
 
+	ptr = ft_strchr(&line[start + 1], line[start]);
+	if (!ptr)
+		return (NULL);
+	*end = (int)(ptr - line);
 	s = malloc((ft_strlen(line) + 1) - 2);
 	if (!s)
 		return (NULL);
@@ -53,14 +58,10 @@ char	*new_line(char *line, int start, int end)
 	j = 0;
 	while (line[i])
 	{
-		if (line[i] == line[start] || line[i] == line[end])
+		if (i == start || i == *end)
 			i++;
 		else
-		{
-			s[j] = line[i];
-			i++;
-			j++;
-		}
+			s[j++] = line[i++];
 	}
 	s[j] = 0;
 	return (s);
@@ -75,15 +76,15 @@ char	*clean_token(t_token *token)
 	char	*new;
 
 	i = 0;
-	start = 0;
 	line = ft_strdup(token->value);
+	if (!line)
+		return (NULL);
 	while (line[i])
 	{
 		if (line[i] == '"' || line[i] == '\'')
 		{
 			start = i;
-			end = (int)(ft_strchr(&line[start + 1], line[start]) - line);
-			new = new_line(line, start, end);
+			new = new_line(line, start, &end);
 			if (!new)
 				return (free(line), NULL);
 			free(line);
