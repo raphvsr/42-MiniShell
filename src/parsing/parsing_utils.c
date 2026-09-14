@@ -6,7 +6,7 @@
 /*   By: kheda <kheda@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/09/11 02:46:04 by kheda             #+#    #+#             */
-/*   Updated: 2026/09/11 02:46:05 by kheda            ###   ########.fr       */
+/*   Updated: 2026/09/14 07:07:30 by kheda            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 
 int	sym(char c)
 {
-	return (c == ' ' || c == '|' || c == '<' || c == '>');
+	return (c == ' ' || c == '\t' || c == '|' || c == '<' || c == '>');
 }
 
 int	count_word_token(t_token *tmp)
@@ -23,10 +23,19 @@ int	count_word_token(t_token *tmp)
 	int	cpt;
 
 	cpt = 0;
-	while (tmp && tmp->type == TOKEN_WORD)
+	while (tmp && tmp->type != TOKEN_PIPE)
 	{
-		cpt++;
-		tmp = tmp->next;
+		if (tmp->type == TOKEN_WORD)
+		{
+			cpt++;
+			tmp = tmp->next;
+		}
+		else
+		{
+			if (!tmp->next || tmp->next->type != TOKEN_WORD) //redir at the end           ERROR MESSAGE
+				break;
+			tmp = tmp->next->next;
+		}
 	}
 	return (cpt);
 }
@@ -37,7 +46,7 @@ char	*new_line(char *line, int start, int end)
 	int		i;
 	int		j;
 
-	s = malloc((strlen(line) + 1) - 2);
+	s = malloc((ft_strlen(line) + 1) - 2);
 	if (!s)
 		return (NULL);
 	i = 0;

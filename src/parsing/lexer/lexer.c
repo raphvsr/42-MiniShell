@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   lexer.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rvasseur <raphael.vasseur@proton.me>       +#+  +:+       +#+        */
+/*   By: kheda <kheda@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/09/11 02:46:26 by kheda             #+#    #+#             */
-/*   Updated: 2026/09/12 16:43:12 by rvasseur         ###   ########.fr       */
+/*   Updated: 2026/09/14 15:31:44 by kheda            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,7 +84,7 @@ static int	token_word(t_token **list, char *line, int *i)
 		{
 			quote = line[*i];
 			if (!find_end_quote(line, i))
-				return (0);
+				return (quote_error());  /*ERREUR MESSAGE (unclosed quote) */
 		}
 		else
 			(*i)++;
@@ -105,11 +105,11 @@ t_token	*lexer(char *line)
 	i = 0;
 	while (line[i])
 	{
-		while (line[i] == ' ' && line[i])
+		while ((line[i] == ' ' || line[i] == '\t') && line[i])
 			i++;
 		if (line[i] == '\0')
 			break ;
-		if (sym(line[i]) && line[i] != ' ')
+		if (sym(line[i]) && line[i] != ' ' && line[i] != '\t')
 		{
 			if (!token(&head, line, &i))
 				return (free_token(&head), NULL);
@@ -122,3 +122,68 @@ t_token	*lexer(char *line)
 	}
 	return (head);
 }
+
+int	main()
+{
+	char	*line;
+	t_token	*token;
+
+	token = NULL;
+
+	while (1)
+	{
+		line = readline("SHELL> ");
+		if (!line)
+		{
+			printf("exit\n");
+			break;
+		}
+		if (*line) // no need ?
+		{
+			add_history(line);
+			token = lexer(line);
+			if (!token)
+				printf("NO\n");
+			else
+				printf("OK\n");
+
+		}
+		free(line);
+	}
+
+	t_token *tmp = token;
+	while (tmp)
+	{
+		printf("---");
+		printf("%s, type : %d , quoted : %d\n", tmp->value, tmp->type, tmp->quoted);
+		tmp = tmp->next;
+	}
+	return 0;
+}
+
+
+//cc lexer.c ../../../libft/libft.a  ../parsing_utils.c lexer_utils.c -lreadline
+
+// TEST : //
+// echo"hi" -> 1
+// "echo \"hi\" | grep" -> 1
+// "echo\"hi\"" -> 1
+// echo abc"def"ghi -> 2
+// echo "hi" | grep -> 4
+// echo "hi -> ne devrait pas marcher
+//echo hello echo "hello" 'world' | OR << OR >> OR >
+//echo "nevermind" || grep "never mind"
+// echo 'sd' d's -> ca doit marcher ?
+
+// TODO : \ (backslash) or ; (semicolon)
+// TODO : || -> cree une erreur
+
+
+// > eww -> marche
+// | dhfj -> NO
+// >> eww -> marche
+// << df -> marche
+// < -> NO
+// echo 'sd' d's -> NO
+// "      " -> OK
+// echo || hello -> OK

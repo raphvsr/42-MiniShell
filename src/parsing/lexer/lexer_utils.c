@@ -10,7 +10,8 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "../../minishell.h"
+#include "../../../libft/libft.h"
 
 void	free_token(t_token **list)
 {

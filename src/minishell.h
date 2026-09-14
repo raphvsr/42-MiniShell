@@ -11,6 +11,7 @@
 # include <readline/history.h>
 # include <sys/types.h>
 # include <sys/wait.h>
+# include <linux/limits.h>
 # include <limits.h>
 # include <dirent.h>
 
@@ -88,8 +89,8 @@ int		sym(char c);
 int		find_end_quote(char *line, int *i);
 t_token	*lexer(char *line);
 
-int		parsing(t_token **tokens, t_cmd **head);
-
+// parser
+int		parsing(t_token **tokens, t_cmd **head, t_env *env);
 void	free_argv(char **argv);
 void	free_redirs(t_redir *redir);
 void	free_cmd(t_cmd **cmd);
@@ -99,9 +100,14 @@ int		count_word_token(t_token *tmp);
 char	*clean_token(t_token *token);
 char	*new_line(char *line, int start, int end);
 
+// expander
+char	*expander(char *s, int quoted, t_env *env, int exit_status);
+
+// error
 void	free_array(char **array);
 void	err_exit(char *cmd, char *msg, int code);
 void	err_warn(char *msg1, char *cmd, char *msg2);
+int		quote_error(void);
 
 int		executor(t_cmd **cmd, t_env **env_list, int status);
 int		exec_redirs(t_redir *redirs);

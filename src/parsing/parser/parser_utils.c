@@ -6,12 +6,11 @@
 /*   By: kheda <kheda@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/09/11 02:46:37 by kheda             #+#    #+#             */
-/*   Updated: 2026/09/11 02:46:38 by kheda            ###   ########.fr       */
+/*   Updated: 2026/09/14 06:32:36 by kheda            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../minishell.h"
-#include "../../../libft/libft.h"
+#include "minishell.h"
 
 void	free_argv(char **argv)
 {

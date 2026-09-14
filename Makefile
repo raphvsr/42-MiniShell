@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: rvasseur <raphael.vasseur@proton.me>       +#+  +:+       +#+         #
+#    By: kheda <kheda@student.42.fr>                +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2026/05/30 12:00:00 by p0ubelle          #+#    #+#              #
-#    Updated: 2026/09/11 21:30:00 by rvasseur         ###   ########.fr        #
+#    Updated: 2026/09/12 15:58:58 by kheda            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -27,6 +27,7 @@ SRCS        =	src/main.c \
 				src/exec/executor.c src/exec/exec_utils.c src/exec/redir.c src/exec/heredoc.c\
 				src/exec/executor2.c \
 				src/parsing/parsing_utils.c \
+				src/parsing/print_errors.c \
 				src/parsing/lexer/split_line.c \
 				src/parsing/lexer/lexer.c \
 				src/parsing/lexer/lexer_utils.c \
