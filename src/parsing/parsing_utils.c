@@ -6,7 +6,7 @@
 /*   By: kheda <kheda@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/09/11 02:46:04 by kheda             #+#    #+#             */
-/*   Updated: 2026/09/14 16:56:13 by kheda            ###   ########.fr       */
+/*   Updated: 2026/09/14 18:48:33 by kheda            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,4 +94,11 @@ char	*clean_token(t_token *token)
 		i++;
 	}
 	return (line);
+}
+
+void	free_one_cmd(t_cmd *cmd)
+{
+	free_argv(cmd->argv);
+	free_redirs(cmd->redirs);
+	free(cmd);
 }

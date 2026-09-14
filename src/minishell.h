@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rvasseur <raphael.vasseur@proton.me>       +#+  +:+       +#+        */
+/*   By: kheda <kheda@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/06 19:22:28 by p0ubelle          #+#    #+#             */
-/*   Updated: 2026/09/14 16:21:09 by rvasseur         ###   ########.fr       */
+/*   Updated: 2026/09/14 18:44:52 by kheda            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,6 +106,7 @@ int		parsing(t_token **tokens, t_cmd **head, t_env *env, int exit_status);
 void	free_argv(char **argv);
 void	free_redirs(t_redir *redir);
 void	free_cmd(t_cmd **cmd);
+void	free_one_cmd(t_cmd *cmd);
 void	add_back_cmd(t_cmd **list, t_cmd *new);
 void	add_back_redir(t_redir **list, t_redir *new);
 int		count_word_token(t_token *tmp);

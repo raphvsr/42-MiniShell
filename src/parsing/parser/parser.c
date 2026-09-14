@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rvasseur <raphael.vasseur@proton.me>       +#+  +:+       +#+        */
+/*   By: kheda <kheda@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/09/11 02:45:59 by kheda             #+#    #+#             */
-/*   Updated: 2026/09/14 17:03:01 by rvasseur         ###   ########.fr       */
+/*   Updated: 2026/09/14 18:42:52 by kheda            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,10 +58,9 @@ static char	*fill_argv(t_token **tmp, t_env *env, int exit_status)
 	return (new);
 }
 
-static t_cmd	*create_cmd(t_token **tmp, t_env *env, int exit_status)
+static t_cmd	*cmd_malloc(t_token **tmp)
 {
 	t_cmd	*command;
-	int		i;
 
 	command = malloc(sizeof(t_cmd));
 	if (!command)
@@ -71,9 +70,19 @@ static t_cmd	*create_cmd(t_token **tmp, t_env *env, int exit_status)
 	if (!command->argv)
 	{
 		free(command);
-		command = NULL;
 		return (NULL);
 	}
+	return (command);
+}
+
+static t_cmd	*create_cmd(t_token **tmp, t_env *env, int exit_status)
+{
+	t_cmd	*command;
+	int		i;
+
+	command = cmd_malloc(tmp);
+	if (!command)
+		return (NULL);
 	i = 0;
 	while ((*tmp) && (*tmp)->type != TOKEN_PIPE)
 	{
@@ -81,26 +90,13 @@ static t_cmd	*create_cmd(t_token **tmp, t_env *env, int exit_status)
 		{
 			command->argv[i] = fill_argv(tmp, env, exit_status);
 			if (!command->argv[i])
-			{
-				command->argv[i] = NULL;
-				free_argv(command->argv);
-				free_redirs(command->redirs);
-				free(command);
-				command = NULL;
-				return (NULL);
-			}
+				return (free_one_cmd(command), NULL);
 			i++;
 		}
-		else
+		else if (!add_redir(&command->redirs, tmp, env, exit_status))
 		{
-			if (!add_redir(&command->redirs, tmp, env, exit_status))
-			{
-				command->argv[i] = NULL;
-				free_argv(command->argv);
-				free(command);
-				command = NULL;
-				return (NULL);
-			}
+			command->argv[i] = NULL;
+			return (free_one_cmd(command), NULL);
 		}
 	}
 	command->argv[i] = NULL;
