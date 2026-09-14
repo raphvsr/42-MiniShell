@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   env_utils.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kheda <kheda@student.42.fr>                +#+  +:+       +#+        */
+/*   By: rvasseur <raphael.vasseur@proton.me>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/09/14 03:40:46 by kheda             #+#    #+#             */
-/*   Updated: 2026/09/14 15:30:45 by kheda            ###   ########.fr       */
+/*   Updated: 2026/09/14 19:33:19 by rvasseur         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,7 +79,7 @@ t_env	*init_env(char **envp)
 
 	env_list = NULL;
 	i = 0;
-	while (envp[i])
+	while (envp && envp[i])
 	{
 		new_node = env_node(envp[i]);
 		if (!new_node)

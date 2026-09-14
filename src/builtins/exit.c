@@ -6,7 +6,7 @@
 /*   By: rvasseur <raphael.vasseur@proton.me>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/09/12 18:22:41 by rvasseur          #+#    #+#             */
-/*   Updated: 2026/09/12 18:22:42 by rvasseur         ###   ########.fr       */
+/*   Updated: 2026/09/14 20:00:04 by rvasseur         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,31 +60,33 @@ static int	validate(const char *str, long long *cexit)
 	return (1);
 }
 
+static void	clean_exit(t_env *env, char *err_arg, int code)
+{
+	write(2, "exit\n", 5);
+	if (err_arg)
+	{
+		ft_putstr_fd("minishell: exit: ", 2);
+		ft_putstr_fd(err_arg, 2);
+		ft_putendl_fd(": numeric argument required", 2);
+	}
+	free_lenv(env);
+	rl_clear_history();
+	exit((unsigned char)code);
+}
+
 int	b_exit(char **args, t_env **env_list, int last_status)
 {
 	long long	exit_code;
 
-	write(2, "exit\n", 5);
 	if (!args[1])
-	{
-		free_lenv(*env_list);
-		rl_clear_history();
-		exit((unsigned char)last_status);
-	}
+		clean_exit(*env_list, NULL, last_status);
 	if (!validate(args[1], &exit_code))
-	{
-		ft_putstr_fd("minishell: exit: ", 2);
-		ft_putstr_fd(args[1], 2);
-		ft_putendl_fd(": numeric argument required", 2);
-		free_lenv(*env_list);
-		exit(2);
-	}
+		clean_exit(*env_list, args[1], 2);
 	if (args[2])
 	{
 		ft_putendl_fd("minishell: exit: too many arguments", 2);
-		return (1);
+		return (2);
 	}
-	free_lenv(*env_list);
-	exit((unsigned char)exit_code);
+	clean_exit(*env_list, NULL, (int)exit_code);
 	return (0);
 }

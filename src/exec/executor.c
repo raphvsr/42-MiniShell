@@ -6,7 +6,7 @@
 /*   By: rvasseur <raphael.vasseur@proton.me>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/09/14 14:21:18 by rvasseur          #+#    #+#             */
-/*   Updated: 2026/09/14 14:21:19 by rvasseur         ###   ########.fr       */
+/*   Updated: 2026/09/14 19:56:39 by rvasseur         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,9 +90,14 @@ int	executor(t_cmd **cmd, t_env **env_list, int status)
 {
 	if (!cmd || !*cmd)
 		return (1);
-	if (heredoc(*cmd) != 0)
+	if (heredoc(*cmd, *env_list, status) != 0)
+	{
+		close_herdocs(*cmd);
 		return (130);
-	if ((*cmd)->argv && (*cmd)->argv[0]
+	}
+	if (!(*cmd)->next && (!(*cmd)->argv || !(*cmd)->argv[0]))
+		status = exec_redirs((*cmd)->redirs);
+	else if ((*cmd)->argv && (*cmd)->argv[0]
 		&& is_buildin((*cmd)->argv[0]) && !(*cmd)->next)
 		status = exec_one_builtin(*cmd, env_list, status);
 	else

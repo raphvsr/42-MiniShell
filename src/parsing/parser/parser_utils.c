@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser_utils.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kheda <kheda@student.42.fr>                +#+  +:+       +#+        */
+/*   By: rvasseur <raphael.vasseur@proton.me>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/09/11 02:46:37 by kheda             #+#    #+#             */
-/*   Updated: 2026/09/14 18:29:56 by kheda            ###   ########.fr       */
+/*   Updated: 2026/09/14 20:29:13 by rvasseur         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,8 @@ void	free_redirs(t_redir *redir)
 	while (redir)
 	{
 		tmp = redir->next;
+		if (redir->type == REDIR_HEREDOC && redir->heredoc_fd != -1)
+			close(redir->heredoc_fd);
 		free(redir->file);
 		free(redir);
 		redir = tmp;

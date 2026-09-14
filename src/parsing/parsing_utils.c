@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parsing_utils.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kheda <kheda@student.42.fr>                +#+  +:+       +#+        */
+/*   By: rvasseur <raphael.vasseur@proton.me>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/09/11 02:46:04 by kheda             #+#    #+#             */
-/*   Updated: 2026/09/14 18:48:33 by kheda            ###   ########.fr       */
+/*   Updated: 2026/09/14 20:46:46 by rvasseur         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,60 +40,32 @@ int	count_word_token(t_token *tmp)
 	return (cpt);
 }
 
-char	*new_line(char *line, int start, int *end)
+char	*clean_token(char *str)
 {
-	char	*s;
-	char	*ptr;
+	char	*res;
 	int		i;
 	int		j;
+	int		q[2];
 
-	ptr = ft_strchr(&line[start + 1], line[start]);
-	if (!ptr)
+	if (!str)
 		return (NULL);
-	*end = (int)(ptr - line);
-	s = malloc((ft_strlen(line) + 1) - 2);
-	if (!s)
+	res = malloc(sizeof(char) * (ft_strlen(str) + 1));
+	if (!res)
 		return (NULL);
-	i = 0;
+	i = -1;
 	j = 0;
-	while (line[i])
+	q[0] = 0;
+	q[1] = 0;
+	while (str[++i])
 	{
-		if (i == start || i == *end)
-			i++;
+		if (str[i] == '\'' && !q[1])
+			q[0] = !q[0];
+		else if (str[i] == '"' && !q[0])
+			q[1] = !q[1];
 		else
-			s[j++] = line[i++];
+			res[j++] = str[i];
 	}
-	s[j] = 0;
-	return (s);
-}
-
-char	*clean_token(t_token *token)
-{
-	int		i;
-	int		start;
-	int		end;
-	char	*line;
-	char	*new;
-
-	i = 0;
-	line = ft_strdup(token->value);
-	if (!line)
-		return (NULL);
-	while (line[i])
-	{
-		if (line[i] == '"' || line[i] == '\'')
-		{
-			start = i;
-			new = new_line(line, start, &end);
-			if (!new)
-				return (free(line), NULL);
-			free(line);
-			line = new;
-			i = end - 2;
-		}
-		i++;
-	}
-	return (line);
+	return (res[j] = '\0', res);
 }
 
 void	free_one_cmd(t_cmd *cmd)

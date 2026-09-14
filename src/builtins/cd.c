@@ -29,7 +29,7 @@ int	b_cd(char **argv, t_env **env_list)
 	t_env	*home;
 
 	if (argv[1] && argv[2])
-		return (ft_putendl_fd("minishell: cd: too many arguments", 2), 1);
+		return (ft_putendl_fd("minishell: cd: too many arguments", 2), 2);
 	if (!argv[1] || ft_strncmp(argv[1], "~", 2) == 0)
 	{
 		home = env_find(*env_list, "HOME");

@@ -16,7 +16,7 @@ t_env	*env_find(t_env *env_list, char *key)
 {
 	while (env_list)
 	{
-		if (ft_strncmp(env_list->key, key, ft_strlen(key) + 1) == 0)
+		if (ft_strcmp(env_list->key, key) == 0)
 			return (env_list);
 		env_list = env_list->next;
 	}
@@ -44,9 +44,11 @@ int	env_rm_value(t_env **env_list, char *key)
 	t_env	*current;
 	t_env	*previous;
 
+	if (!env_list || !*env_list || !key)
+		return (0);
 	current = *env_list;
 	previous = NULL;
-	while (current && ft_strncmp(current->key, key, ft_strlen(key) + 1) != 0)
+	while (current && ft_strcmp(current->key, key) != 0)
 	{
 		previous = current;
 		current = current->next;

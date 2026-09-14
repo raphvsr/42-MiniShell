@@ -6,7 +6,7 @@
 /*   By: rvasseur <raphael.vasseur@proton.me>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/06 19:22:28 by p0ubelle          #+#    #+#             */
-/*   Updated: 2026/09/13 23:44:58 by rvasseur         ###   ########.fr       */
+/*   Updated: 2026/09/14 19:35:28 by rvasseur         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,10 @@ static void	hline(char *line, t_env **env, int *status)
 
 	tokens = lexer(line);
 	if (!tokens)
+	{
+		*status = 2;
 		return ;
+	}
 	cmd = NULL;
 	if (parsing(&tokens, &cmd, *env, *status) && cmd)
 		*status = executor(&cmd, env, *status);
@@ -37,7 +40,7 @@ static int	startloop(t_env *env)
 	status = 0;
 	while (1)
 	{
-		line = readline("p0ubelle> ");
+		line = readline("minishell> ");
 		if (g_signal == SIGINT)
 		{
 			status = 130;

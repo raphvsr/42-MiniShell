@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kheda <kheda@student.42.fr>                +#+  +:+       +#+        */
+/*   By: rvasseur <raphael.vasseur@proton.me>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/06 19:22:28 by p0ubelle          #+#    #+#             */
-/*   Updated: 2026/09/14 18:44:52 by kheda            ###   ########.fr       */
+/*   Updated: 2026/09/14 19:14:46 by rvasseur         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -110,8 +110,8 @@ void	free_one_cmd(t_cmd *cmd);
 void	add_back_cmd(t_cmd **list, t_cmd *new);
 void	add_back_redir(t_redir **list, t_redir *new);
 int		count_word_token(t_token *tmp);
-char	*clean_token(t_token *token);
-char	*new_line(char *line, int start, int end);
+char	*clean_token(char *str);
+char	*new_line(char *line, int start, int *end);
 int		syntax_error(char *token);
 
 char	*expander(char *s, int quoted, t_env *env, int exit_status);
@@ -125,7 +125,7 @@ int		executor(t_cmd **cmd, t_env **env_list, int status);
 int		exec_redirs(t_redir *redirs);
 int		exec_one_builtin(t_cmd *cmd, t_env **env_list, int status);
 int		exec_pipe(t_cmd *cmd, t_env **env_list, int status);
-int		heredoc(t_cmd *cmd);
+int		heredoc(t_cmd *cmd, t_env *env, int status);
 char	*f_cmdpath(char *cmd, t_env *env_list);
 void	cprocess(char *cmd_path, t_cmd *cmd, char **array_env);
 int		childs_status(pid_t last_pid);

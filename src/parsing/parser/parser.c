@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kheda <kheda@student.42.fr>                +#+  +:+       +#+        */
+/*   By: rvasseur <raphael.vasseur@proton.me>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/09/11 02:45:59 by kheda             #+#    #+#             */
-/*   Updated: 2026/09/14 18:42:52 by kheda            ###   ########.fr       */
+/*   Updated: 2026/09/14 20:46:08 by rvasseur         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ static int	add_redir(t_redir **head, t_token **tmp, t_env *env,
 	char	*new;
 
 	if (!(*tmp)->next)
-		return (syntax_error("|"), 0);
+		return (syntax_error("newline"), 0);
 	if ((*tmp)->next->type != TOKEN_WORD)
 		return (syntax_error((*tmp)->next->value), 0);
 	redir = malloc(sizeof(t_redir));
@@ -27,7 +27,7 @@ static int	add_redir(t_redir **head, t_token **tmp, t_env *env,
 		return (free_redirs(*head), 0);
 	redir->type = (*tmp)->type;
 	redir->was_quoted = (*tmp)->next->quoted;
-	redir->file = clean_token((*tmp)->next);
+	redir->file = clean_token((*tmp)->next->value);
 	if (redir->was_quoted != 1 && redir->type != REDIR_HEREDOC)
 	{
 		new = expander(redir->file, redir->was_quoted, env, exit_status);
@@ -44,18 +44,18 @@ static int	add_redir(t_redir **head, t_token **tmp, t_env *env,
 
 static char	*fill_argv(t_token **tmp, t_env *env, int exit_status)
 {
-	char	*s;
-	char	*new;
+	char	*expanded;
+	char	*cleaned;
 
-	s = clean_token(*tmp);
-	if (!s)
+	expanded = expander((*tmp)->value, (*tmp)->quoted, env, exit_status);
+	if (!expanded)
 		return (NULL);
-	new = expander(s, (*tmp)->quoted, env, exit_status);
-	free(s);
-	if (!new)
+	cleaned = clean_token(expanded);
+	free(expanded);
+	if (!cleaned)
 		return (NULL);
 	*tmp = (*tmp)->next;
-	return (new);
+	return (cleaned);
 }
 
 static t_cmd	*cmd_malloc(t_token **tmp)
@@ -66,42 +66,42 @@ static t_cmd	*cmd_malloc(t_token **tmp)
 	if (!command)
 		return (NULL);
 	command->redirs = NULL;
-	command->argv = malloc(sizeof(char *) * (count_word_token(*tmp) + 1));
+	command->argv = ft_calloc(count_word_token(*tmp) + 1, sizeof(char *));
 	if (!command->argv)
 	{
 		free(command);
 		return (NULL);
 	}
+	command->next = NULL;
 	return (command);
 }
 
 static t_cmd	*create_cmd(t_token **tmp, t_env *env, int exit_status)
 {
-	t_cmd	*command;
+	t_cmd	*cmd;
+	char	*exp;
+	int		q;
 	int		i;
 
-	command = cmd_malloc(tmp);
-	if (!command)
-		return (NULL);
+	cmd = cmd_malloc(tmp);
 	i = 0;
-	while ((*tmp) && (*tmp)->type != TOKEN_PIPE)
+	while (cmd && *tmp && (*tmp)->type != TOKEN_PIPE)
 	{
+		q = (*tmp)->quoted;
 		if ((*tmp)->type == TOKEN_WORD)
 		{
-			command->argv[i] = fill_argv(tmp, env, exit_status);
-			if (!command->argv[i])
-				return (free_one_cmd(command), NULL);
-			i++;
+			exp = fill_argv(tmp, env, exit_status);
+			if (!exp)
+				return (free_one_cmd(cmd), NULL);
+			if (q || *exp)
+				cmd->argv[i++] = exp;
+			else
+				free(exp);
 		}
-		else if (!add_redir(&command->redirs, tmp, env, exit_status))
-		{
-			command->argv[i] = NULL;
-			return (free_one_cmd(command), NULL);
-		}
+		else if (!add_redir(&cmd->redirs, tmp, env, exit_status))
+			return (free_one_cmd(cmd), NULL);
 	}
-	command->argv[i] = NULL;
-	command->next = NULL;
-	return (command);
+	return (cmd);
 }
 
 int	parsing(t_token **tokens, t_cmd **head, t_env *env, int exit_status)
@@ -124,8 +124,8 @@ int	parsing(t_token **tokens, t_cmd **head, t_env *env, int exit_status)
 		{
 			if (!tmp->next)
 				return (syntax_error("newline"), free_cmd(head), 0);
-			if (!(tmp->next) || tmp->next->type == TOKEN_PIPE)
-				return (free_cmd(head), 0);
+			if (tmp->next->type == TOKEN_PIPE)
+				return (syntax_error("|"), free_cmd(head), 0);
 			tmp = tmp->next;
 		}
 	}

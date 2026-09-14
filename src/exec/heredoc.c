@@ -6,7 +6,7 @@
 /*   By: rvasseur <raphael.vasseur@proton.me>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/09/14 13:54:28 by rvasseur          #+#    #+#             */
-/*   Updated: 2026/09/14 15:26:49 by rvasseur         ###   ########.fr       */
+/*   Updated: 2026/09/14 19:26:41 by rvasseur         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,9 +16,8 @@ static int	hcheck(char *line, t_redir *redir)
 {
 	if (line == NULL)
 	{
-		err_warn(redir->file, ": warning: here-document "
-			"delimited by end-of-file (wanted `",
-			"')");
+		err_warn("warning: here-document delimited by end-of-file (wanted `",
+			redir->file, "')");
 		return (1);
 	}
 	if (ft_strcmp(line, redir->file) == 0)
@@ -29,41 +28,45 @@ static int	hcheck(char *line, t_redir *redir)
 	return (0);
 }
 
-static int	hloop(t_redir *redir, int fd[2])
+static int	hloop(t_redir *redir, int fd[2], t_env *env, int status)
 {
 	char	*line;
+	char	*tmp;
 
 	while (1)
 	{
 		line = readline("> ");
 		if (g_signal == SIGINT)
-		{
-			close(fd[0]);
-			close(fd[1]);
-			return (1);
-		}
+			return (free(line), close(fd[0]), close(fd[1]), 1);
 		if (hcheck(line, redir))
 			break ;
-		ft_putendl_fd(line, fd[1]);
+		if (!redir->was_quoted)
+		{
+			tmp = line;
+			line = expander(tmp, 0, env, status);
+			free(tmp);
+		}
+		if (line)
+			ft_putendl_fd(line, fd[1]);
 		free(line);
 	}
 	return (0);
 }
 
-int	read_heredoc(t_redir *redir)
+int	read_heredoc(t_redir *redir, t_env *env, int status)
 {
 	int	fd[2];
 
 	if (pipe(fd) == -1)
 		return (perror("minishell: heredoc pipe"), 1);
-	if (hloop(redir, fd) != 0)
+	if (hloop(redir, fd, env, status) != 0)
 		return (1);
 	close(fd[1]);
 	redir->heredoc_fd = fd[0];
 	return (0);
 }
 
-int	heredoc(t_cmd *cmd)
+int	heredoc(t_cmd *cmd, t_env *env, int status)
 {
 	t_redir	*curr_redir;
 
@@ -75,9 +78,9 @@ int	heredoc(t_cmd *cmd)
 			if (curr_redir->type == REDIR_HEREDOC)
 			{
 				if (!curr_redir->file)
-					return (err_warn("syntax error near "
-							"unexpected token ", curr_redir->file, ""), 1);
-				if (read_heredoc(curr_redir) != 0)
+					return (err_warn("syntax error near unexpected token ",
+							curr_redir->file, ""), 1);
+				if (read_heredoc(curr_redir, env, status) != 0)
 					return (1);
 			}
 			curr_redir = curr_redir->next;
